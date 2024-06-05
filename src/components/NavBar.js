@@ -25,17 +25,17 @@ const NavBar = () => {
 
   const addPostIcon = (
     <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/reviews/create">
-      <i class="fa-solid fa-feather"></i>Add review
+      <i className="fa-solid fa-feather"></i>Add review
     </NavLink>
   );
 
   const loggedInIcons = (
     <>
       <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/books">
-        <i class="fa-solid fa-book"></i>Books
+        <i className="fa-solid fa-book"></i>Books
       </NavLink>
       <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/readers">
-        <i class="fa-solid fa-book-open-reader"></i>Readers
+        <i className="fa-solid fa-book-open-reader"></i>Readers
       </NavLink>
       <NavLink className={styles.NavLink} to="/" onClick={handleSignOut}>
         <i className="fas fa-sign-out-alt"></i>Sign out
