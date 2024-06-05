@@ -1,22 +1,25 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useProfileData, useSetProfileData } from "../../contexts/ProfileDataContext";
 import axios from "axios";
-import {useCurrentUser} from "../../contexts/CurrentUserContext";
 import Reviews from "../../components/Reviews";
-import {Container, Row, Col, Card} from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 const ReaderDetails = () => {
-  const {id} = useParams();
+  const { id } = useParams();
+  const { fetchProfileById } = useProfileData();
+  const { handleFollow, handleUnfollow } = useSetProfileData();
   const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const currentUser = useCurrentUser();
+  const currentUser = useCurrentUser(); 
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/profiles/${id}/`);
-        setProfile(response.data);
+        const profileData = await fetchProfileById(id);
+        setProfile(profileData);
 
         const reviewsResponse = await axios.get(`/profiles/${id}/reviews/`);
         
@@ -34,22 +37,44 @@ const ReaderDetails = () => {
         setLoading(false);
       }
     };
-    fetchProfile();
-  }, [id]);
+    fetchData();
+  }, [id, fetchProfileById]);
+
+  const isCurrentUserProfile = currentUser?.pk === profile.id;
+
+  const handleFollowProfile = async () => {
+    try {
+      await handleFollow(profile);
+    } catch (error) {
+      console.error("Error following profile:", error);
+    }
+  };
+
+  const handleUnfollowProfile = async () => {
+    try {
+      await handleUnfollow(profile);
+    } catch (error) {
+      console.error("Error unfollowing profile:", error);
+    }
+  };
+
+  const isFollowing = profile.following_id !== null;
 
   if (loading) return <div>Loading...</div>;
 
-  const isCurrentUserProfile = currentUser.pk === profile.id;
-
   return (
     <Container className="profile-details">
+      {console.log("Is current profile:", profile)}
+      {console.log("Is current user:", currentUser)}
+      {console.log("Are they the same?", isCurrentUserProfile)}
       <Row className="mb-4">
-      <Col md={8}>
+        <Col md={8}>
           <Card>
             <Card.Body>
               <Card.Title>{profile.name}'s Profile</Card.Title>
               <Card.Text>{profile.content}</Card.Text>
-              {isCurrentUserProfile && <p>Placeholder for later functions</p>}
+              {/* Visa edit profile-knapp endast om profilen tillhör den inloggade användaren */}
+              {isCurrentUserProfile && <Button>Placeholder edit</Button>}
             </Card.Body>
           </Card>
         </Col>
@@ -59,6 +84,12 @@ const ReaderDetails = () => {
             <Card.Body>
               <Card.Title>@{profile.owner}</Card.Title>
               <p>Total reviews: {profile.reviews_count}</p>
+              {/* Visa follow/unfollow-knapp beroende på om den inloggade användaren redan följer profilen */}
+              {!isCurrentUserProfile && (isFollowing ? 
+                <Button onClick={handleUnfollowProfile}>Unfollow</Button> :
+                <Button onClick={handleFollowProfile}>Follow</Button>
+              )}
+              {!currentUser}
             </Card.Body>
           </Card>
         </Col>

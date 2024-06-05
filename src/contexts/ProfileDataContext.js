@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { axiosReq, axiosRes } from "../api/axiosDefaults";
+import axios from "axios";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { followHelper, unfollowHelper } from "../utils/utils";
 
@@ -11,7 +11,6 @@ export const useSetProfileData = () => useContext(SetProfileDataContext);
 
 export const ProfileDataProvider = ({ children }) => {
   const [profileData, setProfileData] = useState({
-    // we will use the pageProfile later!
     pageProfile: { results: [] },
     popularProfiles: { results: [] },
   });
@@ -20,7 +19,7 @@ export const ProfileDataProvider = ({ children }) => {
 
   const handleFollow = async (clickedProfile) => {
     try {
-      const { data } = await axiosRes.post("/followers/", {
+      const { data } = await axios.post("/followers/", {
         followed: clickedProfile.id,
       });
 
@@ -45,7 +44,7 @@ export const ProfileDataProvider = ({ children }) => {
 
   const handleUnfollow = async (clickedProfile) => {
     try {
-      await axiosRes.delete(`/followers/${clickedProfile.following_id}/`);
+      await axios.delete(`/followers/${clickedProfile.following_id}/`);
 
       setProfileData((prevState) => ({
         ...prevState,
@@ -66,12 +65,20 @@ export const ProfileDataProvider = ({ children }) => {
     }
   };
 
+  const fetchProfileById = async (profileId) => {
+    try {
+      const { data } = await axios.get(`/profiles/${profileId}/`);
+      return data;
+    } catch (error) {
+      console.error("Error fetching profile by ID:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(
-          "/profiles/?ordering=-followers_count"
-        );
+        const { data } = await axios.get("/profiles/?ordering=-followers_count");
         setProfileData((prevState) => ({
           ...prevState,
           popularProfiles: data,
@@ -85,7 +92,7 @@ export const ProfileDataProvider = ({ children }) => {
   }, [currentUser]);
 
   return (
-    <ProfileDataContext.Provider value={profileData}>
+    <ProfileDataContext.Provider value={{ profileData, fetchProfileById }}>
       <SetProfileDataContext.Provider
         value={{ setProfileData, handleFollow, handleUnfollow }}
       >
