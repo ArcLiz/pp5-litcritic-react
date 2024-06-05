@@ -65,9 +65,6 @@ const ReaderDetails = () => {
 
   return (
     <Container className="profile-details">
-      {console.log("Is current profile:", profile)}
-      {console.log("Is current user:", currentUser)}
-      {console.log("Are they the same?", isCurrentUserProfile)}
       <Row className="mb-4">
         <Col md={8}>
           <Card>
