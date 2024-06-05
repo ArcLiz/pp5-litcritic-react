@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import reviewImage from "../../assets/reviewImage.png"
 import styles from "../../styles/BookDetails.module.css"
 import StarRating from "../../components/StarRating";
-
+import { useCurrentUser } from '../../contexts/CurrentUserContext';
+import CreateReviewForm from "../reviews/CreateReviewForm";
 
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     let isMounted = true;
@@ -44,6 +47,8 @@ const BookDetails = () => {
     };
   }, [id]);
 
+  const handleShow = () => setShowCreateReviewModal(true);
+  const handleClose = () => setShowCreateReviewModal(false);
 
   if (loading) return <div>Loading...</div>;
 
@@ -61,45 +66,58 @@ const BookDetails = () => {
               <Card.Title>{book.title}</Card.Title>
               <Card.Text className="ms-2">by {book.author}</Card.Text>
               <p>{book.description}</p>
+              {currentUser && (
+                <Button variant="primary" onClick={handleShow}>
+                  Add Review
+                </Button>
+              )}
             </Card.Body>
           </Card>
         </Col>
-        
       </Row>
 
       <Row>
-      <div>
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <Card key={review.id} className="mb-3">
-            <Link to={`/reviews/${review.id}`} className="text-decoration-none text-dark">
-              <div className="d-flex align-items-stretch">
-                <div className="ms-3 d-flex align-items-center justify-content-center">
-                    <img src={reviewImage} alt={book.title} className={`img-fluid ${styles.reviewImage}`} />
-                </div>
-                <div className="flex-grow-1 d-flex flex-column justify-content-between p-3">
-                  <div>
-                    <h5 className="mb-2">{review.owner}'s review of {book ? book.title : 'Loading...'}</h5>
-                    <div className="d-flex align-items-center">
-                      <span className="text-secondary me-2">Rating:</span>
-                      <StarRating rating={review.rating} />
+        <div>
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <Card key={review.id} className="mb-3">
+                <Link to={`/reviews/${review.id}`} className="text-decoration-none text-dark">
+                  <div className="d-flex align-items-stretch">
+                    <div className="ms-3 d-flex align-items-center justify-content-center">
+                      <img src={reviewImage} alt={book.title} className={`img-fluid ${styles.reviewImage}`} />
                     </div>
-                    <p className="mt-0 mb-0">
-                      {review.comment.substring(0, 150)}
-                      {review.comment.length > 150 ? '...' : ''}
-                    </p>
+                    <div className="flex-grow-1 d-flex flex-column justify-content-between p-3">
+                      <div>
+                        <h5 className="mb-2">{review.owner}'s review of {book ? book.title : 'Loading...'}</h5>
+                        <div className="d-flex align-items-center">
+                          <span className="text-secondary me-2">Rating:</span>
+                          <StarRating rating={review.rating} />
+                        </div>
+                        <p className="mt-0 mb-0">
+                          {review.comment.substring(0, 150)}
+                          {review.comment.length > 150 ? '...' : ''}
+                        </p>
+                        <Button variant="link" onClick={() => setShowCreateReviewModal(true)}>
+                          More
+                        </Button>
+                      </div>
+                      <small className="text-muted text-end">Reviewed on: {new Date(review.created_at).toLocaleDateString()}</small>
+                    </div>
                   </div>
-                  <small className="text-muted text-end">Reviewed on: {new Date(review.created_at).toLocaleDateString()}</small>
-                </div>
-              </div>
-            </Link>
-          </Card>
-        ))
-      ) : (
-        <p>No reviews yet.</p>
-      )}
-    </div>
-    </Row>
+                </Link>
+              </Card>
+            ))
+          ) : (
+            <p>No reviews yet.</p>
+          )}
+        </div>
+      </Row>
+
+      <CreateReviewForm
+        bookId={book.id}
+        show={showCreateReviewModal}
+        handleClose={handleClose}
+      />
     </Container>
   );
 };
