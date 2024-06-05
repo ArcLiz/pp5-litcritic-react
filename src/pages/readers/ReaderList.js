@@ -28,11 +28,6 @@ const ReaderList = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchUser = () => {
-    const results = profiles.filter((profile) => profile.owner.toLowerCase().includes(searchTerm.toLowerCase()));
-    setSearchResults(results);
-  };
-
   return (
     <div>
       <Form className="d-flex justify-content-between mb-2">
