@@ -8,6 +8,7 @@ import SignUpForm from "./pages/auth/SignUpForm";
 import BooksList from "./pages/books/BookList";
 import ReaderList from "./pages/readers/ReaderList";
 import ReaderDetails from "./pages/readers/ReaderDetails";
+import BookDetails from "./pages/books/BookDetails";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm/> } />
           <Route exact path="/signup" render={() => <SignUpForm/>} />
           <Route exact path="/books" render={() => <BooksList/>} />
+          <Route exact path="/books/:id" render={() => <BookDetails />} />
           <Route exact path="/readers" render={() => <ReaderList/> } />
           <Route exact path="/readers/:id" render={() => <ReaderDetails/> } />
           <Route render={() => <p>Page not found!</p>} />
