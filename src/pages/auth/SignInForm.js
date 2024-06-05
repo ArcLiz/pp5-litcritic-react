@@ -3,9 +3,12 @@ import {useHistory} from "react-router-dom";
 import {Form, Button, Alert} from "react-bootstrap";
 import axios from "axios";
 import {useSetCurrentUser} from "../../contexts/CurrentUserContext";
+import { useRedirect } from "../../hooks/useRedirect";
+import { setTokenTimestamp } from "../../utils/utils";
 
 const SignInForm = () => {
   const setCurrentUser = useSetCurrentUser();
+  useRedirect('loggedIn');
   const [signInData, setSignInData] = useState({
     username: "",
     password: "",
@@ -27,6 +30,7 @@ const SignInForm = () => {
       const {data} = await axios.post("/dj-rest-auth/login/", signInData);
       await axios.post("/dj-rest-auth/login/", signInData);
       setCurrentUser(data.user);
+      setTokenTimestamp(data);
       history.push("/");
     } catch (err) {
       setErrors(err.response?.data);
@@ -59,7 +63,7 @@ const SignInForm = () => {
         )}
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="success" type="submit">
         Sign In
       </Button>
 
