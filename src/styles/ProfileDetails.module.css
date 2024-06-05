@@ -1,0 +1,20 @@
+.followHeart {
+    color: gray;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .followHeart:hover {
+    color: red;
+  }
+  
+  .unfollowHeart {
+    color: red;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .unfollowHeart:hover {
+    color: gray;
+  }
+  
