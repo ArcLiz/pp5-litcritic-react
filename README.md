@@ -1,70 +1,142 @@
-# Getting Started with Create React App
+# LitCrit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
+Welcome to LitCrit, a book review sharing platform for book girlies and boyos alike.
 
-## Available Scripts
+![Responsive](public/documentation/mockup.png)
 
-In the project directory, you can run:
+[Live FrontEnd (React)](https://pp5-litlounge-react-7f64f8e06883.herokuapp.com/) _(ctrl+left click to open in new window)_<br>
+[Live BackEnd (DRF api)](https://pp5-litlounge-7b597e44d7be.herokuapp.com/) _(ctrl+left click to open in new window)_<br>
 
-### `npm start`
+## I'm sorry
+I would like to extend my sincere apologies for the current state of this project and its documentation. Due to unforeseen challenges, including technical difficulties and time constraints, I was unable to meet the expected standards and complete the project as intended. I acknowledge that the result does not meet the requirements set forth, and therefore, I apologize in advance.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+I genuinely hope that despite the current shortcomings, you will consider the effort and dedication invested. Any feedback and constructive criticism you could provide would be immensely valuable to me as I strive to improve and complete the project to both yours and my standards.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This documentation will include headers and short comments about things I have yet to complete or been able to collect in this document.
 
-### `npm test`
+Thank you for your understanding and patience.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Table of Contents
+- [Introduction](#introduction)
+- [Table of Contents](#table-of-contents)
+- [UX](#ux)
+  - [User Stories](#user-stories)
+  - [Admin Stories](#admin-stories)
+  - [Website Goals](#website-goals)
+  - [Requirements](#requirements)
+  - [Agile Approach](#agile-approach)
+- [Structure](#structure)
+  - [Database Models](#database-models)
+  - [UX and Design](#ux-and-design)
+  - [React Components](#react-components)
+  - [Wireframes](#wireframes)
+- [Features](#features)
+  - [Home Page](#home-page)
+  - [Navbar](#navbar)
+  - [Sign Up Page](#sign-up-page)
+  - [Sign In Page](#sign-in-page)
+  - [Avatar](#avatar)
+  - [Search Bars](#search-bars)
+  - [Reviews](#reviews)
+  - [Add a Review](#add-a-review)
+  - [Review Page](#review-page)
+  - [Reader Profile Page](#reader-profile-page)
+  - [Followers](#followers)
+- [CRUD Functionality](#crud-functionality)
+  - [Sign up](#sign-up)
+  - [Reader Profile](#reader-profile)
+  - [Books](#books)
+  - [Review](#review)
+  - [Comments](#comments)
+- [Testing](#testing)
+  - [Front End](#front-end)
+    - [HTML Testing](#html-testing)
+    - [CSS Testing](#css-testing)
+    - [Manual Testing](#manual-testing)
+  - [Back End](#back-end)
+    - [Pylint Testing](#pylint-testing)
+    - [Manual Testing](#manual-testing-1)
+  - [Bugs](#bugs)
+- [Future Development](#future-development)
+- [Technologies Used](#technologies-used)
+  - [Languages](#languages)
+  - [Libraries & Framework](#libraries---framework)
+  - [Databases](#databases)
+  - [Tools](#tools)
+- [Development and Deployment](#development-and-deployment)
+  - [Development](#development)
+  - [Deployment](#deployment)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+- [Credits](#credits)
 
-### `npm run build`
+## UX
+### User Stories
+I planned the bare bones of my project by using a project kanban board, which is linked to my old repository that had issues causing it to malfunction completely. You can find the project board [here](https://github.com/users/ArcLiz/projects/5). I have not had the opportunity to create user stories and issues for things such as styles, testing, refactoring etc, nor have I been able to do those things for the project.
+### Admin Stories
+I meant to build an admin interface for the front end, in order to do the things that only admins can do (such as edit and delete books)
+### Website Goals
+My primary goal for this project is to incorporate it in a previous Library project of mine so that they together can become a full fledged book hub for avid readers and book enthusiasts and collectors. 
+### Requirements
+To be documentet
+## Structure
+  - Database Models
+  - UX and Design
+  - React Components
+  - Wireframes
+## Features
+  - Home Page
+  - Navbar
+  - Sign Up Page
+  - Sign In Page
+  - Avatar
+  - Search Bars
+  - Reviews
+  - Add a Review
+  - Review Page
+  - Reader Profile Page
+  - Followers
+## CRUD Functionality
+  - Sign up
+  - Reader Profile
+  - Books
+  - Review
+  - Comments
+## Testing
+Comment: I have not done any testing outside of clicking around to make sure things work
+  - Front End
+    - HTML Testing
+    - CSS Testing
+    - Manual Testing
+  - Back End
+    - Pylint Testing
+    - Manual Testing
+  - Bugs
+## Future Development
+While the below list is not exhaustive, it represents a selection of potential future development goals aimed at enhancing the platform's functionality and user experience.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Introduce Like/Unlike functionality for reviews
+- Conduct a styling overhaul across the entire frontend for improved aesthetics and user experience
+- Implement a password change feature to enhance user security
+- Implement something like Quill.js for users to be able to create formatted text in reviews, profiles and comments
+- Develop an admin panel for streamlined site management
+- Create a news feed displaying recent activity, particularly from followed users
+- Enhance the book model to include additional details such as book series, tropes and genres
+- Develop a notification system for user interactions
+- Implement pagination for reviews and books to improve performance with large datasets
+- Develop advanced search and filter features for genres, authors etc
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Technologies Used
+  - Languages
+  - Libraries & Framework
+  - Databases
+  - Tools
+## Development and Deployment
+  - Development
+  - Deployment
+    - Backend
+    - Frontend
+## Credits
+- If Thomas Wharton had not been around, I'm not sure there would have been a project to submit at all, so I am very greatful to him for emotional and technical support.
