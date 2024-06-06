@@ -139,4 +139,7 @@ While the below list is not exhaustive, it represents a selection of potential f
     - Backend
     - Frontend
 ## Credits
+### Originality of work
+There's code from the walkthrough project Moments (and the belonging DRF api). I don't think there is any other code that is directly taken from another, but I have googled and browsed forums a plenty, all of which I believe I have noted in documentation not yet included in this readme file
+
 - If Thomas Wharton had not been around, I'm not sure there would have been a project to submit at all, so I am very greatful to him for emotional and technical support.
