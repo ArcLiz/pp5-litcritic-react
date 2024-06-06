@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import reviewImage from "../../assets/reviewImage.png"
 import styles from "../../styles/BookDetails.module.css"
 import StarRating from "../../components/StarRating";
@@ -50,7 +50,26 @@ const BookDetails = () => {
   const handleShow = () => setShowCreateReviewModal(true);
   const handleClose = () => setShowCreateReviewModal(false);
 
+  const handleEditReview = async () => {
+    try {
+      if (userReview) {
+        const confirmed = window.confirm("Do you want to replace your existing review?");
+        if (confirmed) {
+          await axios.delete(`/reviews/${userReview.id}/`);
+        } else {
+          return;
+        }
+      }
+      handleShow();
+    } catch (error) {
+      console.error('Error editing review:', error);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
+
+  const hasUserReviewedBook = reviews.some(review => review.owner === currentUser?.username);
+  const userReview = reviews.find(review => review.owner === currentUser?.username);
 
   return (
     <Container className="book-details">
@@ -67,9 +86,17 @@ const BookDetails = () => {
               <Card.Text className="ms-2">by {book.author}</Card.Text>
               <p>{book.description}</p>
               {currentUser && (
-                <Button variant="primary" onClick={handleShow}>
-                  Add Review
-                </Button>
+                <div>
+                  {hasUserReviewedBook ? (
+                    <Button variant="primary" onClick={handleEditReview}>
+                      Edit Review
+                    </Button>
+                  ) : (
+                    <Button variant="primary" onClick={handleShow}>
+                      Add Review
+                    </Button>
+                  )}
+                </div>
               )}
             </Card.Body>
           </Card>
@@ -117,6 +144,7 @@ const BookDetails = () => {
         bookId={book.id}
         show={showCreateReviewModal}
         handleClose={handleClose}
+        initialReview={userReview}
       />
     </Container>
   );

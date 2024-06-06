@@ -14,21 +14,29 @@ export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const history = useHistory();
 
-  const handleMount = async () => {
-    try {
-      const { data } = await axiosRes.get("dj-rest-auth/user/");
-      setCurrentUser(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
+    let isMounted = true;
+
+    const handleMount = async () => {
+      try {
+        const { data } = await axiosRes.get("dj-rest-auth/user/");
+        if (isMounted) {
+          setCurrentUser(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     handleMount();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useMemo(() => {
-    axiosReq.interceptors.request.use(
+    const requestInterceptor = axiosReq.interceptors.request.use(
       async (config) => {
         if (shouldRefreshToken()) {
           try {
@@ -51,7 +59,7 @@ export const CurrentUserProvider = ({ children }) => {
       }
     );
 
-    axiosRes.interceptors.response.use(
+    const responseInterceptor = axiosRes.interceptors.response.use(
       (response) => response,
       async (err) => {
         if (err.response?.status === 401) {
@@ -71,6 +79,11 @@ export const CurrentUserProvider = ({ children }) => {
         return Promise.reject(err);
       }
     );
+
+    return () => {
+      axiosReq.interceptors.request.eject(requestInterceptor);
+      axiosRes.interceptors.response.eject(responseInterceptor);
+    };
   }, [history]);
 
   return (

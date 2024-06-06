@@ -11,7 +11,7 @@ const StarRatingInput = ({ initialRating, onSubmit }) => {
 
   const handleClick = (value) => {
     setRating(value);
-    onSubmit(value);
+    onSubmit(value); // Här skickar vi med funktionen onSubmit istället för värdet av rating
   };
 
   return (

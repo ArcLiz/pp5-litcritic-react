@@ -3,8 +3,8 @@ import axios from "axios";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { followHelper, unfollowHelper } from "../utils/utils";
 
-const ProfileDataContext = createContext();
-const SetProfileDataContext = createContext();
+export const ProfileDataContext = createContext();
+export const SetProfileDataContext = createContext();
 
 export const useProfileData = () => useContext(ProfileDataContext);
 export const useSetProfileData = () => useContext(SetProfileDataContext);

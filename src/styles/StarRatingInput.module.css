@@ -2,19 +2,19 @@
     display: flex;
   }
   
-  .fa-star {
+  div i .fa-star {
     font-size: 2rem;
-    color: #ccc;
+    color: gold;
     transition: color 0.2s;
     cursor: pointer;
   }
   
-  .fa-star:hover,
+  div i .fa-star:hover,
   .fa-star.fas {
     color: gold;
   }
   
-  .fa-star.hover {
-    color: #ccc;
+  div i .fa-star.hover {
+    color: gold;
   }
   
