@@ -47,7 +47,10 @@ const BookDetails = () => {
   }, [id]);
 
   const handleShow = () => setShowCreateReviewModal(true);
-  const handleClose = () => setShowCreateReviewModal(false);
+  const handleClose = () => {
+    setShowCreateReviewModal(false);
+    window.location.reload();
+  }
 
   const handleEditReview = async () => {
     try {
