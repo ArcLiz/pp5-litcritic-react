@@ -108,7 +108,6 @@ const BookDetails = () => {
           {reviews.length > 0 ? (
             reviews.map((review) => (
               <Card key={review.id} className="mb-3">
-                <Link to={`/reviews/${review.id}`} className="text-decoration-none text-dark">
                   <div className="d-flex align-items-stretch">
                     <div className="ms-3 d-flex align-items-center justify-content-center">
                       <img src={reviewImage} alt={book.title} className={`img-fluid ${styles.reviewImage}`} />
@@ -121,17 +120,12 @@ const BookDetails = () => {
                           <StarRating rating={review.rating} />
                         </div>
                         <p className="mt-0 mb-0">
-                          {review.comment.substring(0, 150)}
-                          {review.comment.length > 150 ? '...' : ''}
+                          {review.comment}
                         </p>
-                        <Button variant="link" onClick={() => setShowCreateReviewModal(true)}>
-                          More
-                        </Button>
                       </div>
                       <small className="text-muted text-end">Reviewed on: {new Date(review.created_at).toLocaleDateString()}</small>
                     </div>
                   </div>
-                </Link>
               </Card>
             ))
           ) : (
