@@ -1,0 +1,20 @@
+.popularBooksCard {
+    margin-top: 20px;
+  }
+  
+  .bookRow {
+    margin-bottom: 10px;
+  }
+
+  .bookRow:hover {
+    background-color: #eee;
+  }
+  
+  .coverImg {
+    height: 100px;
+  }
+  
+  .bookLink {
+    text-decoration: none;
+    color: inherit;
+  }
