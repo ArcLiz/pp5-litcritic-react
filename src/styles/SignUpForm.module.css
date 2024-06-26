@@ -1,0 +1,16 @@
+.mainContainer {
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #a87585;
+    box-shadow: 5px 5px 5px #a87585;
+}
+
+.regBtn {
+    background-color: #a87585;
+    border-color: #b67c8e;
+}
+
+.regBtn:hover {
+    background-color: #c08799;
+    border-color: #b67c8e;
+}
