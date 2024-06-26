@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Button, Row, Col } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "../styles/PopularBooks.module.css"
 
@@ -27,9 +27,9 @@ const PopularBooks = () => {
     if (popularBooks.length === 0) return <div>Loading...</div>;
 
   return (
-    <Card className={styles.popularBooksCard}>
-      <Card.Body>
-        <Card.Title>Popular Books</Card.Title>
+    <Card className="custom-card">
+      <Card.Body className="custom-card-body">
+        <Card.Title className="custom-card-title">Popular Books</Card.Title>
         <hr />
         {popularBooks.map((book) => (
             <Link to={`/books/${book.id}`} key={book.id} className={styles.bookLink}>

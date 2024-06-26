@@ -13,6 +13,7 @@ export const ProfileDataProvider = ({ children }) => {
   const [profileData, setProfileData] = useState({
     pageProfile: { results: [] },
     popularProfiles: { results: [] },
+    newestProfiles: { results: [] },
   });
 
   const currentUser = useCurrentUser();
@@ -33,6 +34,12 @@ export const ProfileDataProvider = ({ children }) => {
         popularProfiles: {
           ...prevState.popularProfiles,
           results: prevState.popularProfiles.results.map((profile) =>
+            followHelper(profile, clickedProfile, data.id)
+          ),
+        },
+        newestProfiles: {
+          ...prevState.newestProfiles,
+          results: prevState.newestProfiles.results.map((profile) =>
             followHelper(profile, clickedProfile, data.id)
           ),
         },
@@ -59,6 +66,12 @@ export const ProfileDataProvider = ({ children }) => {
             unfollowHelper(profile, clickedProfile)
           ),
         },
+        newestProfiles: {
+          ...prevState.newestProfiles,
+          results: prevState.newestProfiles.results.map((profile) =>
+            unfollowHelper(profile, clickedProfile)
+          ),
+        },
       }));
     } catch (err) {
       console.log(err);
@@ -78,10 +91,12 @@ export const ProfileDataProvider = ({ children }) => {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axios.get("/profiles/?ordering=-followers_count");
+        const popularResponse = await axios.get("/profiles/?ordering=-followers_count");
+        const newestResponse = await axios.get("/profiles/?ordering=-date_joined");
         setProfileData((prevState) => ({
           ...prevState,
-          popularProfiles: data,
+          popularProfiles: popularResponse.data,
+          newestProfiles: newestResponse.data,
         }));
       } catch (err) {
         console.log(err);

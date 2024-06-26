@@ -1,12 +1,16 @@
+.newUser:hover {
+  background-color: #eee;
+}
+
 .followHeart,
 .unfollowHeart {
   cursor: pointer;
   font-size: 1.5rem;
-  color: #ff6b6b;
+  color: #ce7d96;
   transition: color 0.3s ease;
 }
 
 .followHeart:hover,
 .unfollowHeart:hover {
-  color: #ff4757;
+  color: #f09ab5;
 }

@@ -1,44 +1,41 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { useProfileData, useSetProfileData } from "../contexts/ProfileDataContext";
 import { Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
-import styles from "../styles/PopularUsers.module.css"
+import styles from "../styles/PopularUsers.module.css";
 
 const PopularUsers = () => {
-  const [popularUsers, setPopularUsers] = useState([]);
+  const { profileData } = useProfileData();
+  const { handleFollow, handleUnfollow } = useSetProfileData();
+  const { popularProfiles } = profileData;
 
-  useEffect(() => {
-    const fetchPopularUsers = async () => {
-      try {
-        const response = await axios.get("/profiles/?ordering=-followers_count");
-        setPopularUsers(response.data.results.slice(0, 3));
-      } catch (error) {
-        console.error("Error fetching popular users:", error);
-      }
-    };
-
-    fetchPopularUsers();
-  }, []);
-
-  if (popularUsers.length === 0) return <div>Loading...</div>;
+  if (popularProfiles.results.length === 0) return <div>Loading...</div>;
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Popular Users</Card.Title>
+    <Card className="custom-card">
+      <Card.Body className="custom-card-body">
+        <Card.Title className="custom-card-title">Popular Users</Card.Title>
         <hr />
-        {popularUsers.map((user) => (
+        {popularProfiles.results.slice(0, 3).map((user) => (
           <Link key={user.id} to={`/readers/${user.id}`} className="text-decoration-none">
-          <Row key={user.id} className={`${styles.profileRow} mb-3 align-items-center`}>
-            <Col xs={2} className="text-right">
-              <Avatar src={user.image} height={40} />
-            </Col>
-            <Col xs={10} className="align-items-center">
-              <div>@{user.owner} ({user.followers_count} follower)</div>
-            </Col>
-            
-          </Row>
+            <Row key={user.id} className={`${styles.profileRow} mb-3 align-items-center`}>
+              <Col xs={1} className="text-right">
+                <Avatar src={user.image} height={40} />
+              </Col>
+              <Col xs={3} className="align-items-center ps-4">
+                <div>@{user.owner}</div>
+              </Col>
+              <Col xs={5} className="align-items-center">
+                <div> {user.followers_count} follower, {user.reviews_count} reviews</div>
+              </Col>
+              <Col xs={2} className="text-end">
+              {user.following_id ? 
+                  <i className={`${styles.unfollowHeart} fas fa-heart`} onClick={(e) => { e.preventDefault(); handleUnfollow(user); }} /> :
+                  <i className={`${styles.followHeart} far fa-heart`} onClick={(e) => { e.preventDefault(); handleFollow(user); }} />
+                }
+              </Col>
+            </Row>
           </Link>
         ))}
       </Card.Body>
