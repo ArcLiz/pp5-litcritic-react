@@ -9,6 +9,7 @@ import BooksList from "./pages/books/BookList";
 import ReaderList from "./pages/readers/ReaderList";
 import ReaderDetails from "./pages/readers/ReaderDetails";
 import BookDetails from "./pages/books/BookDetails";
+import Home from "./pages/base/Home";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <NavBar />
       <Container className={styles.Main}>
         <Switch>
-          <Route exact path="/" render={() => <h1>Home page</h1>} />
+          <Route exact path="/" render={() => <Home />} />
           <Route exact path="/signin" render={() => <SignInForm/> } />
           <Route exact path="/signup" render={() => <SignUpForm/>} />
           <Route exact path="/books" render={() => <BooksList/>} />
