@@ -29,7 +29,7 @@ const PopularUsers = () => {
         <Card.Title>Popular Users</Card.Title>
         <hr />
         {popularUsers.map((user) => (
-          <Link key={user.id} to={`/profiles/${user.id}`} className="text-decoration-none">
+          <Link key={user.id} to={`/readers/${user.id}`} className="text-decoration-none">
           <Row key={user.id} className={`${styles.profileRow} mb-3 align-items-center`}>
             <Col xs={2} className="text-right">
               <Avatar src={user.image} height={40} />
