@@ -5,39 +5,43 @@ import NewestUser from '../../components/NewestUser'
 import PopularUsers from '../../components/PopularUsers'
 import PopularBooks from '../../components/PopularBooks'
 import Quote from '../../assets/quote.png'
+import styles from '../../styles/Home.module.css'
 
 const Home = () => {
   return (
-      <Container fluid>
-          <Row className="mb-4">
-              <Col>
+      <Container className={styles.mainContainer}>
+          <Row className="mb-4 justify-content-center">
+              <Col md={8}>
                   <div className="text-center">
-                      <h1>Welcome to Book Reviews</h1>
-                      <p className="lead">Your go-to place for honest and insightful book reviews.</p>
-                      <Button as={Link} to="/books" variant="primary">Browse All Books</Button>
+                      <h1>LitCrit</h1>
+                      <hr />
+                      <p className="small text-muted">Your go-to place for honest and insightful book reviews.</p>
+                      <Button as={Link} to="/books" className={styles.homeBtn}>Browse All Books</Button>
                   </div>
               </Col>
           </Row>
-          <Row>
-              <Col>
+          <Row className="mb-4 justify-content-center">
+              <Col md={10}>
                   <PopularBooks />
               </Col>
           </Row>
-          <Row>
-              <Col>
-                  <div className="text-center">
-                      <img className="m-3" width="70%" src={Quote} />
-                  </div>
+          
+          <Row className="mb-4 justify-content-center">
+              <Col lg={6}>
+                  <PopularUsers />
               </Col>
-          </Row>
-          <Row className="justify-content-center">
-              <Col lg={9} className="mb-4 mb-md-2">
+              <Col lg={4} className="mb-4 mb-md-2">
                   <NewestUser />
               </Col>
           </Row>
           <Row className="mb-4 justify-content-center">
-              <Col lg={9}>
-                  <PopularUsers />
+              
+          </Row>
+          <Row>
+              <Col>
+                  <div className="text-center">
+                      <img className="m-3" width="70%" src={Quote} alt="book quote by C.S. Lewis" />
+                  </div>
               </Col>
           </Row>
 
