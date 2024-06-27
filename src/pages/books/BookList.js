@@ -35,33 +35,21 @@ const BooksList = () => {
     setSearchTerm(event.target.value);
   };
 
-  console.log(currentUser?.is_admin)
-
   return (
-    <Container className={styles.mainContainer}>
-      <Row>
-        
-      </Row>
-      
+    <Container className={styles.mainContainer}>     
       <Row className="mb-4 justify-content-center">
-      <Col sm={1}>
-      
-      </Col>
-              <Col md={10}>
-                  <div className="text-center">
-                      <h1>Book Library</h1>
-                      <hr />
-                      <p className="small text-muted">Your go-to place for honest and insightful book reviews.</p>
-                  </div>
-              </Col>
-              <Col sm={1} className="text-end">
-      {currentUser && currentUser.is_admin && (
-        <Button as={Link} to="/admin/books" className={styles.panelBtn}>
-          <i class="fa-solid fa-user-tie"></i>
-        </Button>
-      )}
-      </Col>
-          </Row>
+        <Col sm={10} className="text-center">
+            <h1>Book Library</h1>
+            <hr />
+            <p className="small text-muted">Your go-to place for honest and insightful book reviews.</p>
+            {currentUser && currentUser.is_admin && (
+            <Button as={Link} to="/admin/books" className={`${styles.panelBtn} p-0`}>
+              <i class="fa-solid fa-user-tie p-0"></i>
+            </Button>
+          )}
+        </Col>
+
+      </Row>
       <Form className="mb-3">
         <Form.Control
           type="text"
