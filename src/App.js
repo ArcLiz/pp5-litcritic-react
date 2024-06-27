@@ -11,6 +11,8 @@ import ReaderList from "./pages/readers/ReaderList";
 import ReaderDetails from "./pages/readers/ReaderDetails";
 import BookDetails from "./pages/books/BookDetails";
 import Home from "./pages/base/Home";
+import AdminBooks from "./pages/books/AdminBooks";
+import EditBookForm from "./components/EditBookForm";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route exact path="/books/:id" render={() => <BookDetails />} />
           <Route exact path="/readers" render={() => <ReaderList/> } />
           <Route exact path="/readers/:id" render={() => <ReaderDetails/> } />
+          <Route exact path="/admin/books" render={() => <AdminBooks /> } />
+          <Route exact path="/admin/books/edit/:id" render={() => <EditBookForm /> } />
           <Route render={() => <p>Page not found!</p>} />
         </Switch>
       </Container>

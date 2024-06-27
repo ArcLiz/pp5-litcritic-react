@@ -1,0 +1,58 @@
+.mainContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #a87585;
+  box-shadow: 5px 5px 5px #a87585;
+}
+
+.backBtn {
+  background-color: #a87585;
+  border-color: rgb(104, 60, 74);
+  text-shadow: 2px 2px 2px rgb(104, 60, 74);
+}
+
+.backBtn:hover {
+  background-color: #c08799;
+  border-color: #b67c8e;
+  text-shadow: 2px 2px 2px gray;
+}
+.editBtn {
+  background-color: orange;
+  border-color: darkorange;
+  padding: 0;
+  margin: 0;
+}
+
+.editBtn:hover {
+  background-color: rgb(253, 207, 122);
+  border-color: orange;
+  color: white;
+}
+
+.editBtn i {
+  color: white;
+  font-size: 100%;
+  text-shadow: 1px 1px 1px black;
+}
+.editBtn i:hover {
+  color: white;
+}
+
+.deleteBtn {
+  background-color: #b44d50;
+  border-color: #813437;
+  padding: 0;
+  margin: 0;
+}
+
+.deleteBtn:hover {
+  background-color: #d08386;
+  border-color: #813437;
+  color: white;
+}
+
+.deleteBtn i {
+  color: white;
+  font-size: 100%;
+  text-shadow: 1px 1px 1px black;
+}
