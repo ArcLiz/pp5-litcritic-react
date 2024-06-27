@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styles from '../styles/StarRatingInput.module.css';
 
 const StarRatingInput = ({ initialRating, onSubmit }) => {
   const [rating, setRating] = useState(initialRating);
@@ -11,11 +10,11 @@ const StarRatingInput = ({ initialRating, onSubmit }) => {
 
   const handleClick = (value) => {
     setRating(value);
-    onSubmit(value); // Här skickar vi med funktionen onSubmit istället för värdet av rating
+    onSubmit(value);
   };
 
   return (
-    <div className={styles.starRatingInput}>
+    <div>
       {[...Array(5)].map((_, index) => {
         const starValue = index + 1;
         return (
@@ -24,7 +23,11 @@ const StarRatingInput = ({ initialRating, onSubmit }) => {
             onMouseEnter={() => handleHover(starValue)}
             onMouseLeave={() => handleHover(0)}
             onClick={() => handleClick(starValue)}
-            className={`fa-star ${styles.star} ${starValue <= (hoverRating || rating) ? 'fas' : 'far'}`}
+            style={{
+              color: starValue <= (hoverRating || rating) ? "#FFD700" : "#E4E4E4",
+            }}
+            className="fa fa-star"
+            
           ></i>
         );
       })}
