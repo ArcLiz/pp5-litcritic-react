@@ -5,8 +5,20 @@
 
 .NavLink {
   padding: 2px;
+  text-decoration: none;
+}
+
+.Active {
+  color: #a0566d;
 }
 
 .Active i {
-  color: #e75480;
+  color: #f59ab5;
+  
+}
+
+.NavButton {
+  padding: 2px;
+  text-decoration: none;
+  color: #555555;
 }

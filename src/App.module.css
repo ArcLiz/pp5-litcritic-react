@@ -21,7 +21,7 @@
   }
   
   a:hover i {
-    color: #e75480;
+    color: #c08799;
     transition: color ease-in-out 0.3s;
   }
   
@@ -35,7 +35,7 @@
   i:hover {
     cursor: pointer;
     transition: color ease-in-out 0.3s;
-    color: #e75480;
+    color: #dba7b7;
   }
   
   /* scrollbar */
