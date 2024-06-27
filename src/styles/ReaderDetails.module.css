@@ -18,3 +18,6 @@
     color: gray;
   }
   
+  .bookCoverImg {
+    max-height: 200px;
+  }

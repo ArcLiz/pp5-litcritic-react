@@ -2,50 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import StarRatingInput from '../../components/StarRatingInput';
-import { useCurrentUser } from '../../contexts/CurrentUserContext';
-import { useProfileData } from '../../contexts/ProfileDataContext';
 
 const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
-  const [rating, setRating] = useState(initialReview ? initialReview.rating : 0);
-  const [comment, setComment] = useState(initialReview ? initialReview.comment : '');
-  const currentUser = useCurrentUser();
-  const { fetchProfileById } = useProfileData();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     if (initialReview) {
       setRating(initialReview.rating);
       setComment(initialReview.comment);
+    } else {
+      setRating(0);
+      setComment('');
     }
   }, [initialReview]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
       if (initialReview) {
-        // Update existing review
-        await axios.post(`/reviews/create/`, {
-          book: bookId,
+        await axios.put(`/reviews/${initialReview.id}/`, {
           rating,
           comment,
+          book: bookId,
         });
       } else {
-        // Create new review
-        await axios.post('/reviews/create/', {
-          book: bookId,
+        await axios.post('/reviews/', {
           rating,
           comment,
+          book: bookId,
         });
       }
-      
-      // Update profile data after creating or updating a review
-      if (currentUser) {
-        await fetchProfileById(currentUser.profile_id);
-      }
-      
+
       handleClose();
+      window.location.reload();
     } catch (error) {
-      console.error('Error creating or updating review:', error);
+      console.error("Error saving review:", error);
     }
   };
 
@@ -63,9 +56,9 @@ const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
           <Form.Group controlId="reviewRating">
             <Form.Label>Rating</Form.Label>
             <StarRatingInput
-              initialRating={rating} // Uppdatera initialRating med aktuellt betyg
-              onSubmit={handleStarRatingChange} // Uppdatera onSubmit för att hantera betygändringar
-              locked={initialReview !== undefined}
+              initialRating={rating}
+              onSubmit={handleStarRatingChange}
+              locked={false}
             />
           </Form.Group>
           <Form.Group controlId="reviewComment" className="mt-3">

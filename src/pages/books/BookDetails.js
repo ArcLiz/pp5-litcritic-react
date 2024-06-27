@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import reviewImage from "../../assets/reviewImage.png"
-import styles from "../../styles/BookDetails.module.css"
+import { Accordion, Container, Row, Col, Card, Button, Dropdown } from 'react-bootstrap';
 import StarRating from "../../components/StarRating";
 import { useCurrentUser } from '../../contexts/CurrentUserContext';
 import CreateReviewForm from "../reviews/CreateReviewForm";
+import Avatar from "../../components/Avatar";
 
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false); 
+  const [editReviewId, setEditReviewId] = useState(null); 
   const currentUser = useCurrentUser();
 
   useEffect(() => {
@@ -23,19 +23,17 @@ const BookDetails = () => {
       try {
         const [bookResponse, reviewsResponse] = await Promise.all([
           axios.get(`/books/${id}/`),
-          axios.get(`/books/${id}/reviews/`)
+          axios.get(`/reviews/?book=${id}`) 
         ]);
 
         if (isMounted) {
-          console.log("Book data:", bookResponse.data);
           setBook(bookResponse.data);
-          console.log("Reviews data:", reviewsResponse.data);
-          setReviews(reviewsResponse.data);
+          setReviews(reviewsResponse.data.results); 
           setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching book or reviews:", error);
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
     };
 
@@ -46,32 +44,32 @@ const BookDetails = () => {
     };
   }, [id]);
 
-  const handleShow = () => setShowCreateReviewModal(true);
-  const handleClose = () => {
-    setShowCreateReviewModal(false);
-    window.location.reload();
-  }
+  const handleShowReviewModal = () => setShowReviewModal(true);
+  const handleCloseReviewModal = () => setShowReviewModal(false);
 
-  const handleEditReview = async () => {
+  const handleEditReview = (reviewId) => {
+    setEditReviewId(reviewId); 
+    handleShowReviewModal();
+  };
+
+  const handleDeleteReview = async (reviewId) => {
     try {
-      if (userReview) {
-        const confirmed = window.confirm("Do you want to replace your existing review?");
-        if (confirmed) {
-          await axios.delete(`/reviews/${userReview.id}/`);
-        } else {
-          return;
-        }
+      const confirmed = window.confirm("Are you sure you want to delete this review?");
+      if (confirmed) {
+        await axios.delete(`/reviews/${reviewId}/`);
+
+        const updatedReviews = reviews.filter(review => review.id !== reviewId);
+        setReviews(updatedReviews);
       }
-      handleShow();
     } catch (error) {
-      console.error('Error editing review:', error);
+      console.error('Error deleting review:', error);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-
   const hasUserReviewedBook = reviews.some(review => review.owner === currentUser?.username);
   const userReview = reviews.find(review => review.owner === currentUser?.username);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Container className="book-details">
@@ -90,11 +88,11 @@ const BookDetails = () => {
               {currentUser && (
                 <div>
                   {hasUserReviewedBook ? (
-                    <Button variant="primary" onClick={handleEditReview}>
+                    <Button variant="primary" onClick={handleShowReviewModal}>
                       Edit Review
                     </Button>
                   ) : (
-                    <Button variant="primary" onClick={handleShow}>
+                    <Button variant="primary" onClick={handleShowReviewModal}>
                       Add Review
                     </Button>
                   )}
@@ -106,40 +104,66 @@ const BookDetails = () => {
       </Row>
 
       <Row>
-        <div>
-          {reviews.length > 0 ? (
-            reviews.map((review) => (
-              <Card key={review.id} className="mb-3">
-                  <div className="d-flex align-items-stretch">
-                    <div className="ms-3 d-flex align-items-center justify-content-center">
-                      <img src={reviewImage} alt={book.title} className={`img-fluid ${styles.reviewImage}`} />
-                    </div>
-                    <div className="flex-grow-1 d-flex flex-column justify-content-between p-3">
-                      <div>
-                        <h5 className="mb-2">{review.owner}'s review of {book ? book.title : 'Loading...'}</h5>
-                        <div className="d-flex align-items-center">
-                          <span className="text-secondary me-2">Rating:</span>
-                          <StarRating rating={review.rating} />
-                        </div>
-                        <p className="mt-0 mb-0">
-                          {review.comment}
+        <Col>
+          <h3 className="mb-4">Reviews</h3>
+          <Accordion>
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <Card key={review.id}>
+                  <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
+                    <Row className="align-items-center">
+                      <Col sm={4}>
+                        <StarRating rating={review.rating} />
+                      </Col>
+                      <Col sm={5}>
+                        Review by {review.owner}
+                      </Col>
+                      <Col sm={3}>
+                        <p className="text-muted small text-end mb-0">
+                          Reviewed on: <br />
+                          {new Date(review.created_at).toLocaleDateString()}
                         </p>
-                      </div>
-                      <small className="text-muted text-end">Reviewed on: {new Date(review.created_at).toLocaleDateString()}</small>
-                    </div>
-                  </div>
-              </Card>
-            ))
-          ) : (
-            <p>No reviews yet.</p>
-          )}
-        </div>
+                      </Col>
+                    </Row>
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey={index.toString()}>
+                    <Card.Body>
+                      <Row>
+                        <Col sm={2}>
+                          <Avatar src={review.owner_avatar} height={60} />
+                        </Col>
+                        <Col sm={9}>
+                          <p>{review.comment}</p>
+                        </Col>
+                        <Col sm={1} className="d-flex flex-column align-items-end">
+                          {currentUser?.username === review.owner && (
+                            <Dropdown className="mt-auto">
+                              <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="customDropDown">
+                                <i className="fa-solid fa-gear"></i>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => handleEditReview(review.id)}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={() => handleDeleteReview(review.id)}>Delete</Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          )}
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              ))
+            ) : (
+              <p>No reviews yet.</p>
+            )}
+          </Accordion>
+        </Col>
       </Row>
 
       <CreateReviewForm
         bookId={book.id}
-        show={showCreateReviewModal}
-        handleClose={handleClose}
+        show={showReviewModal}
+        handleClose={handleCloseReviewModal}
         initialReview={userReview}
       />
     </Container>
