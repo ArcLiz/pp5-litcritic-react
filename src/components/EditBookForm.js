@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Col, Container, Form, Button, Alert } from 'react-bootstrap';
 import styles from "../styles/EditBookForm.module.css";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const EditBookForm = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const EditBookForm = () => {
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -80,8 +82,12 @@ const EditBookForm = () => {
 
   if (loading) return <div>Loading...</div>;
 
+  const isAdmin = currentUser?.is_admin;
+
   return (
     <Container>
+      {isAdmin ? (
+        <>
       <Row className="justify-content-center mt-2">
         <Col xs={12} md={8} lg={6} className={`${styles.mainContainer}`}>
           <h1 className="mb-4 text-center">Edit Book</h1>
@@ -171,6 +177,13 @@ const EditBookForm = () => {
           <p className="text-center mb-0"><i className="fa-solid fa-book-open-reader"></i></p>
         </Col>
       </Row>
+      </>
+    ) : (
+      <Alert variant="danger" className="text-center">
+        You sneaky sneak! You don't have permission to view this page.
+      </Alert>
+    )}
+
     </Container>
   );
 };
