@@ -1,0 +1,26 @@
+.customDropDown {
+    padding: 0;
+    border-radius: 50%;
+    background-color: #a87585;
+    border-color: #b67c8e;
+}
+
+.customDropDown:hover {
+    background-color: #dba7b7;
+    border-color: #b67c8e;
+}
+
+.customDropDown i {
+    color: white;
+    margin: 0;
+    font-size: 100%;
+}
+
+.customDropDown i:hover {
+    color: #2b181e;
+}
+
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+  
