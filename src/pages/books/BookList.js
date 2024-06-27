@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Row, Col, Form, Container } from "react-bootstrap";
+import { Button, Row, Col, Form, Container } from "react-bootstrap";
 import styles from "../../styles/BookList.module.css";
+import { useCurrentUser } from "../../contexts/CurrentUserContext"
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const BooksList = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -32,8 +35,33 @@ const BooksList = () => {
     setSearchTerm(event.target.value);
   };
 
+  console.log(currentUser?.is_admin)
+
   return (
-    <Container>
+    <Container className={styles.mainContainer}>
+      <Row>
+        
+      </Row>
+      
+      <Row className="mb-4 justify-content-center">
+      <Col sm={1}>
+      
+      </Col>
+              <Col md={10}>
+                  <div className="text-center">
+                      <h1>Book Library</h1>
+                      <hr />
+                      <p className="small text-muted">Your go-to place for honest and insightful book reviews.</p>
+                  </div>
+              </Col>
+              <Col sm={1} className="text-end">
+      {currentUser && currentUser.is_admin && (
+        <Button as={Link} to="/admin/books" className={styles.panelBtn}>
+          <i class="fa-solid fa-user-tie"></i>
+        </Button>
+      )}
+      </Col>
+          </Row>
       <Form className="mb-3">
         <Form.Control
           type="text"

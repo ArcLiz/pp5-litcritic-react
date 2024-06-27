@@ -1,3 +1,28 @@
+.mainContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #a87585;
+  box-shadow: 5px 5px 5px #a87585;
+}
+
+.panelBtn {
+  background-color: white;
+  border: none;
+}
+.panelBtn:hover {
+  background-color: white;
+  border: none;
+}
+
+.panelBtn i {
+  color: #a87585;
+}
+
+.panelBtn i:hover {
+  color: #d7a2b3;
+}
+
+
 .bookItem {
   display: flex;
   align-items: center;
