@@ -45,7 +45,10 @@ const BookDetails = () => {
   }, [id]);
 
   const handleShowReviewModal = () => setShowReviewModal(true);
-  const handleCloseReviewModal = () => setShowReviewModal(false);
+  const handleCloseReviewModal = () => {
+    setEditReviewId(null);
+    setShowReviewModal(false);
+  };
 
   const handleEditReview = (reviewId) => {
     setEditReviewId(reviewId); 
@@ -109,7 +112,7 @@ const BookDetails = () => {
           <Accordion>
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
-                <Card key={review.id}>
+                <Card key={review.id} border={editReviewId === review.id ? 'primary' : ''}>
                   <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
                     <Row className="align-items-center">
                       <Col sm={4}>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { Container, Row, Col, Card, Button, Dropdown, Accordion } from "react-bootstrap";
 import StarRating from "../../components/StarRating";
 import CreateReviewForm from "../reviews/CreateReviewForm";
+import EditProfileForm from "../../components/EditProfileForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 const ReaderDetails = () => {
@@ -130,33 +131,29 @@ const ReaderDetails = () => {
                   <Row className="align-items-center">
                     <Col sm={4}><StarRating rating={review.rating} /></Col>
                     <Col sm={5}>{review.book_detail.title}</Col>
-                    <Col sm={3}><p class="text-muted small text-end mb-0">Reviewed on: <br />{new Date(review.created_at).toLocaleDateString()}</p></Col>
+                    <Col sm={3}><p className="text-muted small text-end mb-0">Reviewed on: <br />{new Date(review.created_at).toLocaleDateString()}</p></Col>
                   </Row>
-                   
-                  
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={index.toString()}>
                   <Card.Body>
                     <Row>
-                    <Col sm={2}>
+                      <Col sm={2}>
                         <img
                           src={review.book_detail.cover_image}
                           alt={`Cover for ${review.book_detail.title}`}
                           style={{ maxHeight: "150px", width: "auto" }}
                         />
-                        
                       </Col>
                       <Col sm={8}>
                         <div ref={contentRef}>
                           <p>{review.comment}</p>
-                          
                         </div>
                       </Col>
                       <Col sm={1} className="ms-auto">
                         {isCurrentUserProfile && (
                           <Dropdown className="mt-auto">
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="customDropDown">
-                              <i class="fa-solid fa-gear"></i>
+                              <i className="fa-solid fa-gear"></i>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                               <Dropdown.Item onClick={() => handleEditReview(review.id)}>Edit</Dropdown.Item>
@@ -181,6 +178,12 @@ const ReaderDetails = () => {
         handleSubmit={handleUpdateReview}
         initialReview={currentReview}
         bookId={currentReview?.book_detail?.id}
+      />
+
+      <EditProfileForm
+        show={showEditProfileForm}
+        handleClose={() => setShowEditProfileForm(false)}
+        profile={profile}
       />
     </Container>
   );
