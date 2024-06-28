@@ -1,3 +1,28 @@
+.mainContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #a87585;
+  box-shadow: 5px 5px 5px #a87585;
+}
+
+.likedHeart {
+  color: #dba7b7;
+}
+
+.unlikedHeart {
+  color: #999;
+}
+
+.homeBtn {
+  background-color: #a87585;
+  border-color: #b67c8e;
+}
+
+.homeBtn:hover {
+  background-color: #c08799;
+  border-color: #b67c8e;
+}
+
 .followHeart {
     color: gray;
     cursor: pointer;

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col, Card, Button, Dropdown, Accordion } from "react-bootstrap";
+import { Button, Container, Row, Col, Card, Dropdown, Accordion } from "react-bootstrap";
 import StarRating from "../../components/StarRating";
 import CreateReviewForm from "../reviews/CreateReviewForm";
 import EditProfileForm from "../../components/EditProfileForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import styles from "../../styles/ReaderDetails.module.css";
+import Avatar from "../../components/Avatar"
 
 const ReaderDetails = () => {
   const { id } = useParams();
@@ -59,8 +61,7 @@ const ReaderDetails = () => {
       if (confirmed) {
         await axios.delete(`/reviews/${reviewId}/`);
 
-        const updatedReviews = reviews.filter((review) => review.id !== reviewId);
-        setReviews(updatedReviews);
+        setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
       }
     } catch (error) {
       console.error("Error deleting review:", error);
@@ -71,59 +72,95 @@ const ReaderDetails = () => {
     try {
       const response = await axios.put(`/reviews/${editReviewId}/`, formData);
       const updatedReview = response.data;
-      const updatedReviews = reviews.map((review) =>
-        review.id === updatedReview.id ? updatedReview : review
+
+      setReviews((prevReviews) =>
+        prevReviews.map((review) => (review.id === updatedReview.id ? updatedReview : review))
       );
-      setReviews(updatedReviews);
       handleCloseEditReviewModal();
     } catch (error) {
       console.error("Error updating review:", error);
     }
   };
 
-  const isCurrentUserProfile = currentUser?.pk === profile.id;
+  const handleLike = async (reviewId) => {
+    try {
+      const { data } = await axios.post("/likes/", { review: reviewId });
+
+      setReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.id === reviewId ? { ...review, likes_count: review.likes_count + 1, like_id: data.id } : review
+        )
+      );
+    } catch (err) {
+      console.error("Error liking review:", err);
+    }
+  };
+
+  const handleUnlike = async (reviewId, likeId) => {
+    try {
+      await axios.delete(`/likes/${likeId}`);
+
+      setReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.id === reviewId ? { ...review, likes_count: review.likes_count - 1, like_id: null } : review
+        )
+      );
+    } catch (err) {
+      console.error("Error unliking review:", err.response);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
 
   return (
-    <Container className="profile-details">
-      <Row className="mb-4">
-        <Col md={8}>
+    <Container>
+      <Row className="mb-4 justify-content-between flex-column-reverse flex-md-row">
+        <Col md={3} className={styles.mainContainer}>
+        <h3>Log book</h3>
+        <hr />
+          {/* <p>Place holder for recent activity</p> */}
+          <p>Books may well be the only true magic. </p>
+          <p>-Alice Hoffman</p>
+        </Col>
+        <Col md={8} className={`${styles.mainContainer}`}>
+        <div className="d-flex justify-content-around">
+          <div className="d-none d-sm-block">
+            <Avatar src={profile.image} height={130} />
+          </div>
+          <div>
+            <h1 className="text-center">{profile.owner}</h1>
+            <div className="d-flex justify-content-around">
+              <p className="px-2 py-0 my-0 text-muted small">Followers</p>
+              <p className="px-2 py-0 my-0 text-muted small">Following</p>
+              <p className="px-2 py-0 my-0 text-muted small">Reviews</p>
+            </div>
+            <div className="d-flex justify-content-around">
+              <p className="px-2 py-0 my-0">{profile.followers_count}</p>
+              <p className="px-2 py-0 my-0">{profile.following_count}</p>
+              <p className="px-2 py-0 my-0">{profile.reviews_count}</p>
+            </div>
+          </div>
+          <div>
+          {currentUser?.pk === profile.id && (
+            <>
+            <span onClick={() => setShowEditProfileForm(true)}><i className="fa-solid fa-bars small"></i></span>
+            </>
+          )}
+          </div>
+        </div>
+
+          <hr />
+
           <Card>
             <Card.Body>
-              <Card.Title>{profile.name}'s Profile</Card.Title>
               <Card.Text>{profile.content}</Card.Text>
-              {isCurrentUserProfile && (
-                <>
-                  <Button onClick={() => setShowEditProfileForm(true)}>Edit Profile</Button>
-                </>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <Card.Img variant="top" src={profile.image} alt={`${profile.owner}'s profile`} />
-            <Card.Body className="d-flex flex-column">
-              <Card.Title>@{profile.owner}</Card.Title>
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <p>Reviews: {profile.reviews_count}</p>
-                </div>
-                <div>
-                  <p>Following: {profile.following_count}</p>
-                </div>
-                <div>
-                  <p>Followers: {profile.followers_count}</p>
-                </div>
-              </div>
             </Card.Body>
           </Card>
         </Col>
       </Row>
       <Row>
-        <Col>
-          <h3 className="mb-4">Recent Reviews</h3>
+        <Col className={styles.mainContainer}>
+          <h3 className="mb-4">My Reviews</h3>
           <Accordion>
             {reviews.map((review, index) => (
               <Card key={review.id}>
@@ -150,7 +187,7 @@ const ReaderDetails = () => {
                         </div>
                       </Col>
                       <Col sm={1} className="ms-auto">
-                        {isCurrentUserProfile && (
+                        {currentUser?.pk === profile.id && (
                           <Dropdown className="mt-auto">
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="customDropDown">
                               <i className="fa-solid fa-gear"></i>
@@ -161,6 +198,14 @@ const ReaderDetails = () => {
                             </Dropdown.Menu>
                           </Dropdown>
                         )}
+                      </Col>
+                      <Col sm={12} className="text-end">
+                        {review.like_id ? (
+                          <span className="text-success me-2" onClick={() => handleUnlike(review.id, review.like_id)}><i className={`fas fa-heart ${styles.likedHeart}`} /></span>
+                        ) : (
+                          <span className="text-primary me-2" onClick={() => handleLike(review.id)}><i className={`far fa-heart ${styles.unlikedHeart}`} /></span>
+                        )}
+                        <span className="text-muted">{review.likes_count}</span>
                       </Col>
                     </Row>
                   </Card.Body>
@@ -184,6 +229,7 @@ const ReaderDetails = () => {
         show={showEditProfileForm}
         handleClose={() => setShowEditProfileForm(false)}
         profile={profile}
+        setProfile={setProfile}
       />
     </Container>
   );
