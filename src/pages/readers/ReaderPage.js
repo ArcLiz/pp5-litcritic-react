@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Container, Row, Col, Accordion, Card, Dropdown, Modal } from "react-bootstrap";
+import { Container, Row, Col, Accordion, Card, Dropdown } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import StarRating from "../../components/StarRating";
@@ -58,7 +58,7 @@ const ReaderPage = () => {
   const handleCloseEditReviewModal = () => {
     setShowEditReviewModal(false);
     setCurrentReview(null);
-    setEditReviewId(null); // Reset editReviewId when closing modal
+    setEditReviewId(null);
   };
 
   const handleEditReview = (reviewId) => {

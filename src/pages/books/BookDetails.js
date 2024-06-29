@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Accordion, Container, Row, Col, Card, Button, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Accordion, Card, Dropdown } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import StarRating from "../../components/StarRating";
-import { useCurrentUser } from '../../contexts/CurrentUserContext';
-import CreateReviewForm from "../reviews/CreateReviewForm";
 import Avatar from "../../components/Avatar";
+import LikeButton from "../../components/LikeButton";
+import CreateReviewForm from "../reviews/CreateReviewForm";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import styles from "../../styles/BookDetails.module.css";
 
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showReviewModal, setShowReviewModal] = useState(false); 
-  const [editReviewId, setEditReviewId] = useState(null); 
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [editReviewId, setEditReviewId] = useState(null);
   const currentUser = useCurrentUser();
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchBookAndReviews = async () => {
       try {
         const [bookResponse, reviewsResponse] = await Promise.all([
           axios.get(`/books/${id}/`),
-          axios.get(`/reviews/?book=${id}`) 
+          axios.get(`/reviews/?book=${id}`),
         ]);
 
-        if (isMounted) {
-          setBook(bookResponse.data);
-          setReviews(reviewsResponse.data.results); 
-          setLoading(false);
-        }
+        setBook(bookResponse.data);
+        setReviews(reviewsResponse.data.results);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching book or reviews:", error);
         setLoading(false);
@@ -38,10 +36,6 @@ const BookDetails = () => {
     };
 
     fetchBookAndReviews();
-
-    return () => {
-      isMounted = false;
-    };
   }, [id]);
 
   const handleShowReviewModal = () => setShowReviewModal(true);
@@ -51,7 +45,7 @@ const BookDetails = () => {
   };
 
   const handleEditReview = (reviewId) => {
-    setEditReviewId(reviewId); 
+    setEditReviewId(reviewId);
     handleShowReviewModal();
   };
 
@@ -61,66 +55,76 @@ const BookDetails = () => {
       if (confirmed) {
         await axios.delete(`/reviews/${reviewId}/`);
 
-        const updatedReviews = reviews.filter(review => review.id !== reviewId);
+        const updatedReviews = reviews.filter((review) => review.id !== reviewId);
         setReviews(updatedReviews);
       }
     } catch (error) {
-      console.error('Error deleting review:', error);
+      console.error("Error deleting review:", error);
     }
   };
 
-  const hasUserReviewedBook = reviews.some(review => review.owner === currentUser?.username);
-  const userReview = reviews.find(review => review.owner === currentUser?.username);
+  const hasUserReviewedBook = reviews.some((review) => review.owner === currentUser?.username);
+  const userReview = reviews.find((review) => review.owner === currentUser?.username);
+
+  const updateReview = (updatedReview) => {
+    const updatedReviews = reviews.map((review) =>
+      review.id === updatedReview.id ? updatedReview : review
+    );
+    setReviews(updatedReviews);
+  };
 
   if (loading) return <div>Loading...</div>;
 
   return (
-    <Container className="book-details">
-      <Row className="mb-4">
-        <Col md={3}>
-          <Card>
-            <Card.Img variant="top" src={book.cover_image} alt={`${book.title} cover`} />
-          </Card>
+    <Container>
+      <Row className={`${styles.mainContainer} text-center justify-content-center`}>
+        <Col md={10}>
+          <h1>{book.title}</h1>
+          <p>By {book.author}</p>
+          <hr />
         </Col>
-        <Col md={9}>
+      </Row>
+      <Row className="my-4 justify-content-around d-flex">
+        <Col md={2}>
+          <img src={book.cover_image} alt={book.title} width={150} />
+        </Col>
+        <Col md={10}>
           <Card>
             <Card.Body>
-              <Card.Title>{book.title}</Card.Title>
-              <Card.Text className="ms-2">by {book.author}</Card.Text>
+              <h4>Description</h4>
               <p>{book.description}</p>
-              {currentUser && (
-                <div>
-                  {hasUserReviewedBook ? (
-                    <Button variant="primary" onClick={handleShowReviewModal}>
-                      Edit Review
-                    </Button>
-                  ) : (
-                    <Button variant="primary" onClick={handleShowReviewModal}>
-                      Add Review
-                    </Button>
-                  )}
-                </div>
-              )}
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
-      <Row>
+      <Row className={styles.mainContainer}>
         <Col>
-          <h3 className="mb-4">Reviews</h3>
+        {currentUser && (
+            <div className={`${styles.reviewBtn} mt-2 d-flex justify-content-between`}>
+              <h3 className="mb-4">Reviews</h3>
+              {hasUserReviewedBook ? (
+                <span onClick={handleShowReviewModal}>
+                  <i className="fa-solid fa-feather"></i>
+                  <i className="fa-solid fa-user-plus"></i>
+                </span>
+              ) : (
+                <span onClick={handleShowReviewModal} className="text-muted small">
+                  Add <i className="fa-solid fa-feather"></i>
+                </span>
+              )}
+            </div>
+          )}
           <Accordion>
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
-                <Card key={review.id} border={editReviewId === review.id ? 'primary' : ''}>
+                <Card key={review.id}>
                   <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
                     <Row className="align-items-center">
                       <Col sm={4}>
                         <StarRating rating={review.rating} />
                       </Col>
-                      <Col sm={5}>
-                        Review by {review.owner}
-                      </Col>
+                      <Col sm={5}>{review.owner}</Col>
                       <Col sm={3}>
                         <p className="text-muted small text-end mb-0">
                           Reviewed on: <br />
@@ -138,18 +142,31 @@ const BookDetails = () => {
                         <Col sm={9}>
                           <p>{review.comment}</p>
                         </Col>
-                        <Col sm={1} className="d-flex flex-column align-items-end">
+                        <Col sm={1} className="d-flex flex-column align-items-end mb-auto">
                           {currentUser?.username === review.owner && (
                             <Dropdown className="mt-auto">
-                              <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="customDropDown">
+                              <Dropdown.Toggle
+                                variant="secondary"
+                                id="dropdown-basic"
+                                className="customDropDown"
+                              >
                                 <i className="fa-solid fa-gear"></i>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => handleEditReview(review.id)}>Edit</Dropdown.Item>
-                                <Dropdown.Item onClick={() => handleDeleteReview(review.id)}>Delete</Dropdown.Item>
+                                <Dropdown.Item onClick={() => handleEditReview(review.id)}>
+                                  Edit
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => handleDeleteReview(review.id)}>
+                                  Delete
+                                </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
                           )}
+                        </Col>
+                      </Row>
+                      <Row className="mt-3">
+                        <Col sm={12} className="text-end">
+                          <LikeButton review={review} updateReview={updateReview} />
                         </Col>
                       </Row>
                     </Card.Body>
