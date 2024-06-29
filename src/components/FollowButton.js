@@ -1,32 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSetProfileData } from "../contexts/ProfileDataContext";
-import styles from "../styles/FollowButton.module.css";
+import styles from "../styles/FollowButton.module.css"
 
 const FollowButton = ({ profile }) => {
   const { handleFollow, handleUnfollow } = useSetProfileData();
-  const { following_id } = profile;
+  const [following, setFollowing] = useState(profile.following_id ? true : false);
 
-  const handleFollowClick = () => {
-    if (handleFollow) {
-      handleFollow(profile);
-    }
-  };
-
-  const handleUnfollowClick = () => {
-    if (handleUnfollow) {
-      handleUnfollow(profile);
+  const handleButtonClick = async () => {
+    try {
+      if (following) {
+        await handleUnfollow(profile);
+        setFollowing(false);
+      } else {
+        await handleFollow(profile);
+        setFollowing(true);
+      }
+    } catch (error) {
+      console.error("Error toggling follow:", error);
     }
   };
 
   return (
     <>
-      {following_id ? (
-        <span className="text-success me-2" onClick={handleUnfollowClick}>
-          <i className={`fa-solid fa-heart-circle-check ${styles.followedUser}`} />
+      {following ? (
+        <span
+          className={`text-success me-2 ${styles.followedUser}`}
+          onClick={handleButtonClick}
+        >
+          <i className="fa-solid fa-heart-circle-check" />
         </span>
       ) : (
-        <span className="text-primary me-2" onClick={handleFollowClick}>
-          <i className={`fa-solid fa-heart-circle-xmark ${styles.unfollowedUser}`} />
+        <span
+          className={`text-primary me-2 ${styles.unfollowedUser}`}
+          onClick={handleButtonClick}
+        >
+          <i className="fa-solid fa-heart-circle-xmark" />
         </span>
       )}
     </>

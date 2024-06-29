@@ -1,15 +1,15 @@
-.followedUser {
-    color: #a7bedb;
-}
-
-.followedUser:hover {
+.unfollowedUser i {
     color: #999;
 }
 
-.unfollowedUser {
-    color: #999;
+.unfollowedUser i:hover {
+    color: #a7bedb;
 }
 
-.unfollowedUser:hover {
+.followedUser i {
     color: #a7bedb;
+}
+
+.followedUser i:hover {
+    color: #999;
 }
