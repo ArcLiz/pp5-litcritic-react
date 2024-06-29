@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Button, Container, Row, Col, Card, Dropdown, Accordion } from "react-bootstrap";
+import { Container, Row, Col, Card, Dropdown, Accordion } from "react-bootstrap";
 import StarRating from "../../components/StarRating";
 import CreateReviewForm from "../reviews/CreateReviewForm";
 import EditProfileForm from "../../components/EditProfileForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import styles from "../../styles/ReaderDetails.module.css";
-import Avatar from "../../components/Avatar"
+import Avatar from "../../components/Avatar";
+import LikeButton from "../../components/LikeButton";
 
 const ReaderDetails = () => {
   const { id } = useParams();
@@ -82,72 +83,45 @@ const ReaderDetails = () => {
     }
   };
 
-  const handleLike = async (reviewId) => {
-    try {
-      const { data } = await axios.post("/likes/", { review: reviewId });
-
-      setReviews((prevReviews) =>
-        prevReviews.map((review) =>
-          review.id === reviewId ? { ...review, likes_count: review.likes_count + 1, like_id: data.id } : review
-        )
-      );
-    } catch (err) {
-      console.error("Error liking review:", err);
-    }
-  };
-
-  const handleUnlike = async (reviewId, likeId) => {
-    try {
-      await axios.delete(`/likes/${likeId}`);
-
-      setReviews((prevReviews) =>
-        prevReviews.map((review) =>
-          review.id === reviewId ? { ...review, likes_count: review.likes_count - 1, like_id: null } : review
-        )
-      );
-    } catch (err) {
-      console.error("Error unliking review:", err.response);
-    }
-  };
-
   if (loading) return <div>Loading...</div>;
 
   return (
     <Container>
       <Row className="mb-4 justify-content-between flex-column-reverse flex-md-row">
         <Col md={3} className={styles.mainContainer}>
-        <h3>Log book</h3>
-        <hr />
-          {/* <p>Place holder for recent activity</p> */}
+          <h3>Log book</h3>
+          <hr />
           <p>Books may well be the only true magic. </p>
           <p>-Alice Hoffman</p>
         </Col>
         <Col md={8} className={`${styles.mainContainer}`}>
-        <div className="d-flex justify-content-around">
-          <div className="d-none d-sm-block">
-            <Avatar src={profile.image} height={130} />
-          </div>
-          <div>
-            <h1 className="text-center">{profile.owner}</h1>
-            <div className="d-flex justify-content-around">
-              <p className="px-2 py-0 my-0 text-muted small">Followers</p>
-              <p className="px-2 py-0 my-0 text-muted small">Following</p>
-              <p className="px-2 py-0 my-0 text-muted small">Reviews</p>
+          <div className="d-flex justify-content-around">
+            <div className="d-none d-sm-block">
+              <Avatar src={profile.image} height={130} />
             </div>
-            <div className="d-flex justify-content-around">
-              <p className="px-2 py-0 my-0">{profile.followers_count}</p>
-              <p className="px-2 py-0 my-0">{profile.following_count}</p>
-              <p className="px-2 py-0 my-0">{profile.reviews_count}</p>
+            <div>
+              <h1 className="text-center">{profile.owner}</h1>
+              <div className="d-flex justify-content-around">
+                <p className="px-2 py-0 my-0 text-muted small">Followers</p>
+                <p className="px-2 py-0 my-0 text-muted small">Following</p>
+                <p className="px-2 py-0 my-0 text-muted small">Reviews</p>
+              </div>
+              <div className="d-flex justify-content-around">
+                <p className="px-2 py-0 my-0">{profile.followers_count}</p>
+                <p className="px-2 py-0 my-0">{profile.following_count}</p>
+                <p className="px-2 py-0 my-0">{profile.reviews_count}</p>
+              </div>
+            </div>
+            <div>
+              {currentUser?.pk === profile.id && (
+                <>
+                  <span onClick={() => setShowEditProfileForm(true)}>
+                    <i className="fa-solid fa-bars small"></i>
+                  </span>
+                </>
+              )}
             </div>
           </div>
-          <div>
-          {currentUser?.pk === profile.id && (
-            <>
-            <span onClick={() => setShowEditProfileForm(true)}><i className="fa-solid fa-bars small"></i></span>
-            </>
-          )}
-          </div>
-        </div>
 
           <hr />
 
@@ -166,9 +140,16 @@ const ReaderDetails = () => {
               <Card key={review.id}>
                 <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
                   <Row className="align-items-center">
-                    <Col sm={4}><StarRating rating={review.rating} /></Col>
+                    <Col sm={4}>
+                      <StarRating rating={review.rating} />
+                    </Col>
                     <Col sm={5}>{review.book_detail.title}</Col>
-                    <Col sm={3}><p className="text-muted small text-end mb-0">Reviewed on: <br />{new Date(review.created_at).toLocaleDateString()}</p></Col>
+                    <Col sm={3}>
+                      <p className="text-muted small text-end mb-0">
+                        Reviewed on: <br />
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </p>
+                    </Col>
                   </Row>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={index.toString()}>
@@ -200,12 +181,7 @@ const ReaderDetails = () => {
                         )}
                       </Col>
                       <Col sm={12} className="text-end">
-                        {review.like_id ? (
-                          <span className="text-success me-2" onClick={() => handleUnlike(review.id, review.like_id)}><i className={`fas fa-heart ${styles.likedHeart}`} /></span>
-                        ) : (
-                          <span className="text-primary me-2" onClick={() => handleLike(review.id)}><i className={`far fa-heart ${styles.unlikedHeart}`} /></span>
-                        )}
-                        <span className="text-muted">{review.likes_count}</span>
+                        <LikeButton review={review} setReviews={setReviews} />
                       </Col>
                     </Row>
                   </Card.Body>
