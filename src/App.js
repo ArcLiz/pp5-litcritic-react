@@ -8,7 +8,7 @@ import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
 import BooksList from "./pages/books/BookList";
 import ReaderList from "./pages/readers/ReaderList";
-import ReaderDetails from "./pages/readers/ReaderDetails";
+import ReaderPage from "./pages/readers/ReaderPage";
 import BookDetails from "./pages/books/BookDetails";
 import Home from "./pages/base/Home";
 import AdminBooks from "./pages/books/AdminBooks";
@@ -26,7 +26,7 @@ function App() {
           <Route exact path="/books" render={() => <BooksList/>} />
           <Route exact path="/books/:id" render={() => <BookDetails />} />
           <Route exact path="/readers" render={() => <ReaderList/> } />
-          <Route exact path="/readers/:id" render={() => <ReaderDetails/> } />
+          <Route exact path="/readers/:id" render={() => <ReaderPage /> } />
           <Route exact path="/admin/books" render={() => <AdminBooks /> } />
           <Route exact path="/admin/books/edit/:id" render={() => <EditBookForm /> } />
           <Route render={() => <p>Page not found!</p>} />
