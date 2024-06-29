@@ -29,3 +29,7 @@
   border-color: #68998b;
   color: white;
 }
+
+.coverImagePreview {
+  height: 150px;
+}
