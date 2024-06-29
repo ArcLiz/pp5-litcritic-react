@@ -41,11 +41,11 @@ const LikeButton = ({ review, setReviews }) => {
     <span className="text-end">
       {review.like_id ? (
         <span className="text-success me-2" onClick={() => handleUnlike(review.id, review.like_id)}>
-          <i className={`fas fa-heart ${styles.likedHeart}`} />
+          <i className={`fa-solid fa-thumbs-up ${styles.likedHeart}`} />
         </span>
       ) : (
         <span className="text-primary me-2" onClick={() => handleLike(review.id)}>
-          <i className={`far fa-heart ${styles.unlikedHeart}`} />
+          <i className={`fa-regular fa-thumbs-up ${styles.unlikedHeart}`} />
         </span>
       )}
       <span className="text-muted">{review.likes_count}</span>
