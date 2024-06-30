@@ -44,7 +44,7 @@ const BooksList = () => {
             <p className="small text-muted">Your go-to place for honest and insightful book reviews.</p>
             {currentUser && currentUser.is_admin && (
             <Button as={Link} to="/admin/books" className={`${styles.panelBtn} p-0`}>
-              <i class="fa-solid fa-user-tie p-0"></i>
+              <i className="fa-solid fa-user-tie p-0"></i>
             </Button>
           )}
         </Col>
