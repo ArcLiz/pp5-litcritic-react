@@ -1,18 +1,22 @@
 import React from "react";
-import { useProfileData } from "../../contexts/ProfileDataContext";
+import { useProfileData, useSetProfileData } from "../../contexts/ProfileDataContext";
 import { Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
-import styles from "../../styles/NewestUser.module.css";
-import FollowButton from "../../components/FollowButton";
-import Asset from "../../components/Asset"; // Import the Asset component
+import styles from "../../styles/FollowButton.module.css";
+import Asset from "../../components/Asset";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 const NewestUser = () => {
   const { popularProfiles } = useProfileData();
+  const { handleFollow, handleUnfollow } = useSetProfileData();
+  const currentUser = useCurrentUser();
 
-  const sortedProfiles = popularProfiles.results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const sortedProfiles = popularProfiles.results.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
 
-  if (sortedProfiles.length === 0) return <Asset spinner />; // Use Asset component for loading indicator
+  if (sortedProfiles.length === 0) return <Asset spinner />;
 
   return (
     <Card className="custom-card">
@@ -31,7 +35,23 @@ const NewestUser = () => {
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={4} className="text-end">
-              <FollowButton profile={user} />
+              {currentUser && (
+                user?.following_id ? (
+                  <span
+                    className={styles.followedUser}
+                    onClick={() => handleUnfollow(user)}
+                  >
+                    <i className="fa-solid fa-heart-circle-check" />
+                  </span>
+                ) : (
+                  <span
+                    className={styles.unfollowedUser}
+                    onClick={() => handleFollow(user)}
+                  >
+                    <i className="fa-solid fa-heart-circle-xmark" />
+                  </span>
+                )
+              )}
             </Col>
           </Row>
         ))}

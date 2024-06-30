@@ -3,14 +3,21 @@ import { useProfileData } from "../../contexts/ProfileDataContext";
 import { Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
-import styles from "../../styles/NewestUser.module.css";
-import FollowButton from "../../components/FollowButton";
-import Asset from "../../components/Asset"; 
+import styles from "../../styles/FollowButton.module.css";
+import Asset from "../../components/Asset";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+
 
 const PopularUsers = () => {
   const { popularProfiles } = useProfileData();
+  const { handleFollow, handleUnfollow } = useSetProfileData();
+  const currentUser = useCurrentUser();
 
-  const sortedProfiles = popularProfiles.results.sort((a, b) => b.followers_count - a.followers_count);
+  const sortedProfiles = popularProfiles.results.sort(
+    (a, b) => b.followers_count - a.followers_count
+  );
+
 
   if (sortedProfiles.length === 0) return <Asset spinner />;
 
@@ -31,7 +38,23 @@ const PopularUsers = () => {
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={4} className="text-end">
-              <FollowButton profile={user} />
+            {currentUser && (
+  user?.following_id ? (
+    <span
+      className={styles.followedUser}
+      onClick={() => handleUnfollow(user)}
+    >
+      <i className="fa-solid fa-heart-circle-check" />
+    </span>
+  ) : (
+    <span
+      className={styles.unfollowedUser}
+      onClick={() => handleFollow(user)}
+    >
+      <i className="fa-solid fa-heart-circle-xmark" />
+    </span>
+  )
+)}
             </Col>
           </Row>
         ))}

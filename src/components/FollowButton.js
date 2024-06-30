@@ -1,24 +1,27 @@
-import React, { useState } from "react";
-import { useSetProfileData } from "../contexts/ProfileDataContext";
+import React from "react";
 import styles from "../styles/FollowButton.module.css";
+import { useSetProfileData } from "../contexts/ProfileDataContext";
 
 const FollowButton = ({ profile }) => {
   const { handleFollow, handleUnfollow } = useSetProfileData();
-  const [following, setFollowing] = useState(profile.following_id ? true : false);
+
+  const following = profile ? !!profile.following_id : false;
 
   const handleButtonClick = async () => {
     try {
       if (following) {
-        await handleUnfollow(profile);
-        setFollowing(false);
+        await handleUnfollow({ following_id: profile.following_id });
       } else {
         await handleFollow(profile);
-        setFollowing(true);
       }
     } catch (error) {
       console.error("Error toggling follow:", error);
     }
   };
+
+  if (!profile) {
+    return null;
+  }
 
   return (
     <>

@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Card } from "react-bootstrap";
 import Avatar from "../../components/Avatar";
 import EditProfileForm from "../../components/EditProfileForm";
 import { axiosReq } from "../../api/axiosDefaults";
-import styles from "../../styles/Reader.module.css";
-import FollowButton from "../../components/FollowButton";
+import styles from "../../styles/ReaderDetails.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
 
 const ReaderDetails = ({ profile }) => {
   const [showEditProfileForm, setShowEditProfileForm] = useState(false);
   const currentUser = useCurrentUser();
   const [profileData, setProfileData] = useState(profile);
+  const { handleFollow, handleUnfollow } = useSetProfileData();
+
+  useEffect(() => {
+    setProfileData(profile);
+  }, [profile]);
 
   const updateProfileData = (updatedProfile) => {
     setProfileData(updatedProfile);
@@ -35,35 +40,51 @@ const ReaderDetails = ({ profile }) => {
     }
   };
 
-  const isOwner = currentUser?.username === profile.owner;
+  const isOwner = currentUser?.username === profile.owner
 
   return (
     <Col md={8} className={`${styles.mainContainer}`}>
       <div className="d-flex justify-content-between">
         <div className="d-none d-sm-block">
-          <Avatar src={profileData.image} height={130} />
+          <Avatar src={profile.image} height={130} />
         </div>
         <div>
-          <h1 className="text-center">{profileData.owner}</h1>
+          <h1 className="text-center">{profile.owner}</h1>
           <div className="d-flex justify-content-around">
             <p className="px-2 py-0 my-0 text-muted small">Followers</p>
             <p className="px-2 py-0 my-0 text-muted small">Following</p>
             <p className="px-2 py-0 my-0 text-muted small">Reviews</p>
           </div>
           <div className="d-flex justify-content-around">
-            <p className="px-2 py-0 my-0">{profileData.followers_count}</p>
-            <p className="px-2 py-0 my-0">{profileData.following_count}</p>
-            <p className="px-2 py-0 my-0">{profileData.reviews_count}</p>
+            <p className="px-2 py-0 my-0">{profile.followers_count}</p>
+            <p className="px-2 py-0 my-0">{profile.following_count}</p>
+            <p className="px-2 py-0 my-0">{profile.reviews_count}</p>
           </div>
         </div>
         <div>
-          {isOwner ? (
-            <span onClick={handleShowEditProfileForm}>
-              <i className="fa-solid fa-bars small"></i>
-            </span>
-          ) : (
-            <FollowButton profile={profileData} />
-          )}
+        {currentUser && !isOwner && (
+  profile?.following_id ? (
+    <span
+      className={styles.followedUser}
+      onClick={() => handleUnfollow(profile)}
+    >
+      <i className="fa-solid fa-heart-circle-check" />
+    </span>
+  ) : (
+    <span
+      className={styles.unfollowedUser}
+      onClick={() => handleFollow(profile)}
+    >
+      <i className="fa-solid fa-heart-circle-xmark" />
+    </span>
+  )
+)}
+
+{currentUser && isOwner && (
+  <span onClick={handleShowEditProfileForm}>
+    <i className="fa-solid fa-bars small"></i>
+  </span>
+)}
         </div>
       </div>
       <hr />

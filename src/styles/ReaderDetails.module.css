@@ -1,0 +1,22 @@
+.mainContainer {
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #a87585;
+    box-shadow: 5px 5px 5px #a87585;
+  }
+
+  .unfollowedUser i {
+    color: #999;
+}
+
+.unfollowedUser i:hover {
+    color: #a7bedb;
+}
+
+.followedUser i {
+    color: #a7bedb;
+}
+
+.followedUser i:hover {
+    color: #999;
+}
