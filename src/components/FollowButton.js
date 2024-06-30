@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSetProfileData } from "../contexts/ProfileDataContext";
-import styles from "../styles/FollowButton.module.css"
+import styles from "../styles/FollowButton.module.css";
 
 const FollowButton = ({ profile }) => {
   const { handleFollow, handleUnfollow } = useSetProfileData();

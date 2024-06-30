@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import NewestUser from '../../components/NewestUser'
-import PopularUsers from '../../components/PopularUsers'
+import NewestUsers from '../readers/NewestUsers'
+import PopularUsers from '../readers/PopularUsers'
 import PopularBooks from '../../components/PopularBooks'
 import Quote from '../../assets/quote.png'
 import styles from '../../styles/Home.module.css'
@@ -31,7 +31,7 @@ const Home = () => {
                   <PopularUsers />
               </Col>
               <Col lg={4} className="mb-4 mb-md-2">
-                  <NewestUser />
+                  <NewestUsers />
               </Col>
           </Row>
           <Row className="mb-4 justify-content-center">

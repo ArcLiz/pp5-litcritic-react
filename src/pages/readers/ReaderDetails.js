@@ -3,11 +3,13 @@ import { Col, Card } from "react-bootstrap";
 import Avatar from "../../components/Avatar";
 import EditProfileForm from "../../components/EditProfileForm";
 import { axiosReq } from "../../api/axiosDefaults";
-import styles from "../../styles/ReaderDetails.module.css";
-import FollowButton from "../../components/FollowButton"
+import styles from "../../styles/Reader.module.css";
+import FollowButton from "../../components/FollowButton";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-const ReaderDetails = ({ profile, currentUser }) => {
+const ReaderDetails = ({ profile }) => {
   const [showEditProfileForm, setShowEditProfileForm] = useState(false);
+  const currentUser = useCurrentUser();
 
   const handleShowEditProfileForm = () => {
     setShowEditProfileForm(true);
@@ -27,8 +29,9 @@ const ReaderDetails = ({ profile, currentUser }) => {
     }
   };
 
-  return (
+  const isOwner = currentUser?.username === profile.owner
 
+  return (
     <Col md={8} className={`${styles.mainContainer}`}>
       <div className="d-flex justify-content-between">
         <div className="d-none d-sm-block">
@@ -48,7 +51,7 @@ const ReaderDetails = ({ profile, currentUser }) => {
           </div>
         </div>
         <div>
-          {currentUser?.pk === profile.id ? (
+          {isOwner ? (
             <span onClick={handleShowEditProfileForm}>
               <i className="fa-solid fa-bars small"></i>
             </span>
@@ -70,8 +73,6 @@ const ReaderDetails = ({ profile, currentUser }) => {
         handleSubmit={handleEditProfile}
       />
     </Col>
-
-
   );
 };
 

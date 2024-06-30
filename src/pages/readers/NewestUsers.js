@@ -1,24 +1,25 @@
 import React from "react";
-import { useProfileData } from "../contexts/ProfileDataContext";
+import { useProfileData } from "../../contexts/ProfileDataContext";
 import { Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Avatar from "./Avatar";
-import styles from "../styles/NewestUser.module.css";
-import "../styles/CustomCardStyles.css";
-import FollowButton from "./FollowButton";
+import Avatar from "../../components/Avatar";
+import styles from "../../styles/NewestUser.module.css";
+import FollowButton from "../../components/FollowButton";
+import Asset from "../../components/Asset"; // Import the Asset component
 
 const NewestUser = () => {
-  const { profileData } = useProfileData();
-  const { newestProfiles } = profileData;
+  const { popularProfiles } = useProfileData();
 
-  if (newestProfiles.results.length === 0) return <div>Loading...</div>;
+  const sortedProfiles = popularProfiles.results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+  if (sortedProfiles.length === 0) return <Asset spinner />; // Use Asset component for loading indicator
 
   return (
     <Card className="custom-card">
       <Card.Body className="custom-card-body">
         <Card.Title className="custom-card-title">Newest Users</Card.Title>
         <hr />
-        {newestProfiles.results.slice(0, 3).map((user) => (
+        {sortedProfiles.slice(0, 5).map((user) => (
           <Row key={user.id} className={`${styles.newUser} mb-2 align-items-center`}>
             <Col xs={2} className="text-right">
               <Link to={`/readers/${user.id}`} className={`${styles.newUser} text-decoration-none mb-3`}>
