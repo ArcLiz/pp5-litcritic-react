@@ -38,23 +38,23 @@ const PopularUsers = () => {
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={4} className="text-end">
-            {currentUser && (
-  user?.following_id ? (
-    <span
-      className={styles.followedUser}
-      onClick={() => handleUnfollow(user)}
-    >
-      <i className="fa-solid fa-heart-circle-check" />
-    </span>
-  ) : (
-    <span
-      className={styles.unfollowedUser}
-      onClick={() => handleFollow(user)}
-    >
-      <i className="fa-solid fa-heart-circle-xmark" />
-    </span>
-  )
-)}
+              {currentUser && (
+                user?.following_id ? (
+                  <span
+                    className={styles.followedUser}
+                    onClick={() => handleUnfollow(user)}
+                  >
+                    <i className="fa-solid fa-heart-circle-check" />
+                  </span>
+                ) : (
+                  <span
+                    className={styles.unfollowedUser}
+                    onClick={() => handleFollow(user)}
+                  >
+                    <i className="fa-solid fa-heart-circle-xmark" />
+                  </span>
+                )
+              )}
             </Col>
           </Row>
         ))}

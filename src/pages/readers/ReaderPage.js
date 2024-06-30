@@ -66,7 +66,7 @@ const ReaderPage = () => {
   const handleCloseEditReviewModal = () => {
     setShowEditReviewModal(false);
     setCurrentReview(null);
-    setEditReviewId(null); // Reset editReviewId when closing modal
+    setEditReviewId(null);
   };
 
   const handleEditReview = (reviewId) => {
