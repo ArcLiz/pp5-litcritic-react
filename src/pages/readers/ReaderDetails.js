@@ -43,7 +43,7 @@ const ReaderDetails = ({ profile }) => {
   const isOwner = currentUser?.username === profile.owner
 
   return (
-    <Col md={8} className={`${styles.mainContainer}`}>
+    <Col md={7} className={`${styles.mainContainer}`}>
       <div className="d-flex justify-content-between">
         <div className="d-none d-sm-block">
           <Avatar src={profile.image} height={130} />

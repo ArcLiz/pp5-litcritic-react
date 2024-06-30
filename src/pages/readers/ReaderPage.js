@@ -11,6 +11,7 @@ import LikeButton from "../../components/LikeButton";
 import CreateReviewForm from "../reviews/CreateReviewForm"
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import axios from "axios";
+import ActivityFeed from "../../components/ActivityFeed";
 
 
 const ReaderPage = () => {
@@ -103,79 +104,82 @@ const ReaderPage = () => {
   return (
     <Container>
       {loading ? (
-        <Asset spinner/>
+        <Asset spinner />
       ) : (
         <>
+        <Row>
+          <Col sm={5}><ActivityFeed profile={profile}/></Col>
           <ReaderDetails profile={profile} />
+          </Row>
 
-          <Container>
-          <Col className={styles.mainContainer}>
-          <h3 className="mb-4">My Reviews</h3>
-          <Accordion>
-            {profileReviews.results.map((review, index) => (
-              <Card key={review.id}>
-                <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
-                  <Row className="align-items-center">
-                    <Col sm={4}>
-                      <StarRating rating={review.rating} />
-                    </Col>
-                    <Col sm={5}>{review.book_detail.title}</Col>
-                    <Col sm={3}>
-                      <p className="text-muted small text-end mb-0">
-                        Reviewed on: <br />
-                        {new Date(review.created_at).toLocaleDateString()}
-                      </p>
-                    </Col>
-                  </Row>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey={index.toString()}>
-                  <Card.Body>
-                    <Row>
-                      <Col sm={2}>
-                        <img
-                          src={review.book_detail.cover_image}
-                          alt={`Cover for ${review.book_detail.title}`}
-                          style={{ maxHeight: "150px", width: "auto" }}
-                        />
-                      </Col>
-                      <Col sm={8}>
-                        <div ref={contentRef}>
-                          <p>{review.comment}</p>
-                        </div>
-                      </Col>
-                      <Col sm={1} className="ms-auto">
-                        {currentUser?.pk === profile.id && (
-                          <Dropdown className="mt-auto">
-                            <Dropdown.Toggle
-                              variant="secondary"
-                              id={`dropdown-${review.id}`}
-                              className="customDropDown"
-                            >
-                              <i className="fa-solid fa-gear"></i>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => handleEditReview(review.id)}>
-                                Edit
-                              </Dropdown.Item>
-                              <Dropdown.Item onClick={() => handleDeleteReview(review.id)}>
-                                Delete
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        )}
-                      </Col>
-                      <Col sm={12} className="text-end">
-                        <LikeButton review={review} updateReview={updateReview} />
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            ))}
-          </Accordion>
-          {profileReviews.results.length === 0 && <p>No reviews yet.</p>}
-        </Col>
-          </Container>
+          <Row className="mt-4">
+            <Col className={styles.mainContainer}>
+              <h3 className="mb-4">My Reviews</h3>
+              <Accordion>
+                {profileReviews.results.map((review, index) => (
+                  <Card key={review.id}>
+                    <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
+                      <Row className="align-items-center">
+                        <Col sm={4}>
+                          <StarRating rating={review.rating} />
+                        </Col>
+                        <Col sm={5}>{review.book_detail.title}</Col>
+                        <Col sm={3}>
+                          <p className="text-muted small text-end mb-0">
+                            Reviewed on: <br />
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </p>
+                        </Col>
+                      </Row>
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey={index.toString()}>
+                      <Card.Body>
+                        <Row>
+                          <Col sm={2}>
+                            <img
+                              src={review.book_detail.cover_image}
+                              alt={`Cover for ${review.book_detail.title}`}
+                              style={{ maxHeight: "150px", width: "auto" }}
+                            />
+                          </Col>
+                          <Col sm={8}>
+                            <div ref={contentRef}>
+                              <p>{review.comment}</p>
+                            </div>
+                          </Col>
+                          <Col sm={1} className="ms-auto">
+                            {currentUser?.pk === profile.id && (
+                              <Dropdown className="mt-auto">
+                                <Dropdown.Toggle
+                                  variant="secondary"
+                                  id={`dropdown-${review.id}`}
+                                  className="customDropDown"
+                                >
+                                  <i className="fa-solid fa-gear"></i>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item onClick={() => handleEditReview(review.id)}>
+                                    Edit
+                                  </Dropdown.Item>
+                                  <Dropdown.Item onClick={() => handleDeleteReview(review.id)}>
+                                    Delete
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
+                          </Col>
+                          <Col sm={12} className="text-end">
+                            <LikeButton review={review} updateReview={updateReview} />
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
+                ))}
+              </Accordion>
+              {profileReviews.results.length === 0 && <p>No reviews yet.</p>}
+            </Col>
+          </Row>
         </>
       )}
       <CreateReviewForm
