@@ -1,65 +1,112 @@
-import React, { useState } from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, Form, Button, Alert } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
+import { axiosReq } from "../api/axiosDefaults";
+import styles from "../styles/EditBookForm.module.css"
 
-const EditProfileForm = ({ show, handleClose, profile, handleSubmit, updateProfileData }) => {
+const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
   const [name, setName] = useState(profile.name);
   const [content, setContent] = useState(profile.content);
-  const [image, setImage] = useState(null);
-  const [error, setError] = useState("");
+  const [image, setImage] = useState(profile.image);
+  const [errors, setErrors] = useState({});
+  const imageFile = useRef();
 
-  const handleEditProfile = async () => {
+  useEffect(() => {
+    setName(profile.name);
+    setContent(profile.content);
+    setImage(profile.image);
+  }, [profile]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "image") {
+      setImage(URL.createObjectURL(event.target.files[0]));
+    } else {
+      if (name === "name") {
+        setName(value);
+      } else {
+        setContent(value);
+      }
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("content", content);
+
+    if (imageFile?.current?.files[0]) {
+      formData.append("image", imageFile.current.files[0]);
+    }
+
     try {
-      if (!name || !content) {
-        setError("Please fill in all fields.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("content", content);
-      if (image) {
-        formData.append("image", image);
-      }
-
-      const response = await axios.put(`/profiles/${profile.id}/`, formData);
+      const response = await axiosReq.put(`/profiles/${profile.id}/`, formData);
       updateProfileData(response.data);
       handleClose();
     } catch (error) {
-      setError("An error occurred. Please try again later.");
+      setErrors(error.response?.data);
     }
   };
 
   return (
     <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
+      <Modal.Header className={styles.closeBtn}>
         <Modal.Title>Edit Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <Form>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mt-3">
+            <Form.Label>Display Name</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={handleChange}
+              name="name"
+            />
           </Form.Group>
-          <Form.Group controlId="content">
-            <Form.Label>Content</Form.Label>
-            <Form.Control as="textarea" rows={3} value={content} onChange={(e) => setContent(e.target.value)} />
+
+          <Form.Group className="mt-3">
+            <Form.Label>Bio</Form.Label>
+            <Form.Control
+              as="textarea"
+              value={content}
+              onChange={handleChange}
+              name="content"
+              rows={5}
+            />
           </Form.Group>
-          <Form.Group controlId="image">
-            <Form.Label>Profile Image</Form.Label>
-            <Form.Control type="file" onChange={(e) => setImage(e.target.files[0])} />
+          <Form.Group className="mt-3 text-center">
+            {image && (
+              <figure>
+                <Image className={styles.coverImagePreview} src={image} fluid />
+              </figure>
+            )}
+            <div>
+              <Form.Label htmlFor="image-upload" className={`${styles.uploadBtn} btn my-auto`}>
+                Change Image
+              </Form.Label>
+            </div>
+            <Form.File
+              id="image-upload"
+              ref={imageFile}
+              accept="image/*"
+              name="image"
+              onChange={handleChange}
+              className="d-none"
+            />
           </Form.Group>
+          
+          <Button className={`w-100 mt-3 ${styles.saveBtn}`} type="submit">
+            Save Changes
+          </Button>
+          {errors?.non_field_errors?.map((error, index) => (
+            <Alert key={index} variant="danger">
+              {error}
+            </Alert>
+          ))}
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleEditProfile}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

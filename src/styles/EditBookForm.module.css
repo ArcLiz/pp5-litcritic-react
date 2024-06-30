@@ -33,3 +33,7 @@
 .coverImagePreview {
   height: 150px;
 }
+
+.closeBtn .close-button {
+  color: red;
+}
