@@ -18,24 +18,22 @@ const PopularUsers = () => {
         <Card.Title className="custom-card-title">Popular Users</Card.Title>
         <hr />
         {popularProfiles.results.slice(0, 3).map((user) => (
-          
-            <Row key={user.id} className={`${styles.profileRow} mb-3 align-items-center`}>
-              <Col xs={1} className="text-right">
-              <Link key={user.id} to={`/readers/${user.id}`} className="text-decoration-none">
+          <Row key={user.id} className={`${styles.profileRow} mb-3 align-items-center`}>
+            <Col xs={1} className="text-right">
+              <Link to={`/readers/${user.id}`} className="text-decoration-none">
                 <Avatar src={user.image} height={40} />
-                </Link>
-              </Col>
-              <Col xs={3} className="align-items-center ps-4">
-                <div>@{user.owner}</div>
-              </Col>
-              <Col xs={5} className="align-items-center">
-                <div> {user.followers_count} follower, {user.reviews_count} reviews</div>
-              </Col>
-              <Col xs={2} className="text-end">
-                <FollowButton profile={user} />
-              </Col>
-            </Row>
-          
+              </Link>
+            </Col>
+            <Col xs={3} className="align-items-center ps-4">
+              <div>@{user.owner}</div>
+            </Col>
+            <Col xs={5} className="align-items-center">
+              <div>{user.followers_count} follower, {user.reviews_count} reviews</div>
+            </Col>
+            <Col xs={2} className="text-end">
+              <FollowButton profile={user} />
+            </Col>
+          </Row>
         ))}
       </Card.Body>
     </Card>
