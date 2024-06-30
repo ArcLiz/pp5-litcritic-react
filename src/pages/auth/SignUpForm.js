@@ -104,7 +104,7 @@ const SignUpForm = () => {
             ))}
           </Form>
           <hr />
-          <p className="text-center mb-0"><i class="fa-solid fa-book-open-reader"></i></p>
+          <p className="text-center mb-0"><i className="fa-solid fa-book-open-reader"></i></p>
         </Col>
       </Row>
     </Container>
