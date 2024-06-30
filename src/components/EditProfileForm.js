@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
+import axios from "axios";
 
-const EditProfileForm = ({ show, handleClose, profile }) => {
+const EditProfileForm = ({ show, handleClose, profile, handleSubmit, updateProfileData }) => {
   const [name, setName] = useState(profile.name);
   const [content, setContent] = useState(profile.content);
   const [image, setImage] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleEditProfile = async () => {
     try {
       if (!name || !content) {
-        setError('Please fill in all fields.');
+        setError("Please fill in all fields.");
         return;
       }
 
       const formData = new FormData();
-      formData.append('name', name);
-      formData.append('content', content);
+      formData.append("name", name);
+      formData.append("content", content);
       if (image) {
-        formData.append('image', image);
+        formData.append("image", image);
       }
 
-      await axios.put(`/profiles/${profile.id}/`, formData);
+      const response = await axios.put(`/profiles/${profile.id}/`, formData);
+      updateProfileData(response.data);
       handleClose();
     } catch (error) {
-      console.error('Error editing profile:', error);
-      setError('An error occurred. Please try again later.');
+      setError("An error occurred. Please try again later.");
     }
   };
 
