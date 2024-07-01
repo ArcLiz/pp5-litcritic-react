@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import logo from "../assets/logo.png";
+import logo from "../assets/lit-logo-new-full.png";
+import logoSmall from "../assets/lit-logo-new.png";
 import styles from "../styles/NavBar.module.css";
 import { NavLink } from "react-router-dom";
 import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
@@ -30,11 +31,14 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar expanded={expanded} className={styles.NavBar} expand="md" fixed="top">
-        <Container>
+      <Navbar expanded={expanded} className={` p-0 ${styles.NavBar}`} expand="md" fixed="top">
+        <Container >
           <NavLink to="/">
-            <Navbar.Brand>
-              <img src={logo} alt="logo" height="45" />
+            <Navbar.Brand className="d-none d-lg-block">
+              <img className="m-0" src={logo} alt="logo" height="50" />
+            </Navbar.Brand>
+            <Navbar.Brand className="d-block d-lg-none">
+            <img className="m-0" src={logoSmall} alt="logo" height="50" />
             </Navbar.Brand>
           </NavLink>
           {currentUser && (
