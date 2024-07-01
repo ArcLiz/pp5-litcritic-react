@@ -11,7 +11,7 @@ const Home = () => {
   return (
       <Container className={styles.mainContainer}>
           <Row className="mb-4 justify-content-center">
-              <Col md={8}>
+              <Col md={10}>
                   <div className="text-center">
                       <h1>LitCrit</h1>
                       <hr />
@@ -21,16 +21,16 @@ const Home = () => {
               </Col>
           </Row>
           <Row className="mb-4 justify-content-center">
-              <Col md={10}>
+              <Col lg={10}>
                   <PopularBooks />
               </Col>
           </Row>
           
           <Row className="mb-4 justify-content-center">
-              <Col lg={6}>
+              <Col lg={5} className="mt-4">
                   <PopularUsers />
               </Col>
-              <Col lg={4} className="mb-4 mb-md-2">
+              <Col lg={5} className="mt-4">
                   <NewestUsers />
               </Col>
           </Row>

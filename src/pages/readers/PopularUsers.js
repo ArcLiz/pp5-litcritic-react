@@ -22,9 +22,9 @@ const PopularUsers = () => {
   if (sortedProfiles.length === 0) return <Asset spinner />;
 
   return (
-    <Card className="custom-card">
-      <Card.Body className="custom-card-body">
-        <Card.Title className="custom-card-title">Popular Users</Card.Title>
+    <Card>
+      <Card.Body>
+        <Card.Title>Popular Users</Card.Title>
         <hr />
         {sortedProfiles.slice(0, 5).map((user) => (
           <Row key={user.id} className={`${styles.newUser} mb-2 align-items-center`}>
@@ -34,7 +34,7 @@ const PopularUsers = () => {
               </Link>
             </Col>
             <Col xs={6}>
-              <div className="custom-card-text">@{user.owner}</div>
+              <div>@{user.owner}</div>
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={4} className="text-end">
