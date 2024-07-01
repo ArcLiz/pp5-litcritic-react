@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Col, Container, Form, Button, Alert } from 'react-bootstrap';
-import styles from "../styles/EditBookForm.module.css";
+import styles from "../styles/Forms.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const EditBookForm = () => {
@@ -151,7 +151,7 @@ const EditBookForm = () => {
               )}
               <div className="text-center">
                 <Form.Label
-                  className={`${styles.uploadBtn} btn my-auto`}
+                  className={`${styles.greenBtn} btn my-auto`}
                   htmlFor="cover_image"
                 >
                   Change the image
@@ -169,7 +169,7 @@ const EditBookForm = () => {
               )}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className={`${styles.saveBtn} mt-3 w-100`}>
+            <Button variant="primary" type="submit" className={`${styles.pinkBtn} mt-3 w-100`}>
               Save Changes
             </Button>
           </Form>

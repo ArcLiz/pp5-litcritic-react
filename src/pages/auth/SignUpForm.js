@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { useRedirect } from "../../hooks/useRedirect";
-import styles from "../../styles/SignUpForm.module.css"
+import styles from "../../styles/Forms.module.css"
 
 const SignUpForm = () => {
   useRedirect('loggedIn');
@@ -93,7 +93,7 @@ const SignUpForm = () => {
               )}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className={`${styles.regBtn} mt-3 w-100`}>
+            <Button variant="primary" type="submit" className={`${styles.pinkBtn} mt-3 w-100`}>
               Sign Up
             </Button>
             <p className="text-end small text-muted mt-1">Do you already have an account? <a href="/signin">Sign in</a> instead!</p>

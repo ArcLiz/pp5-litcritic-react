@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import { axiosReq } from "../api/axiosDefaults";
-import styles from "../styles/EditBookForm.module.css"
+import styles from "../styles/Forms.module.css"
 
 const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
   const [name, setName] = useState(profile.name);
@@ -51,7 +51,7 @@ const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
 
   return (
     <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header className={styles.closeBtn}>
+      <Modal.Header>
         <Modal.Title>Edit Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -83,7 +83,7 @@ const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
               </figure>
             )}
             <div>
-              <Form.Label htmlFor="image-upload" className={`${styles.uploadBtn} btn my-auto`}>
+              <Form.Label htmlFor="image-upload" className={`${styles.greenBtn} btn my-auto`}>
                 Change Image
               </Form.Label>
             </div>
@@ -97,7 +97,7 @@ const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
             />
           </Form.Group>
           
-          <Button className={`w-100 mt-3 ${styles.saveBtn}`} type="submit">
+          <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
             Save Changes
           </Button>
           {errors?.non_field_errors?.map((error, index) => (

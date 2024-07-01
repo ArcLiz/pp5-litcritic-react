@@ -1,39 +1,37 @@
+/* Used in Signup, Signin, Book, Review and Profile forms */
+
 .mainContainer {
     background-color: white;
     padding: 25px;
     border: 1px solid #a87585;
     box-shadow: 5px 5px 5px #a87585;
-  }
+}
 
-  .saveBtn {
+.pinkBtn {
     background-color: #a87585;
     border-color: rgb(104, 60, 74);
     text-shadow: 2px 2px 2px rgb(104, 60, 74);
 }
 
-.saveBtn:hover {
+.pinkBtn:hover {
     background-color: #c08799;
     border-color: #b67c8e;
     text-shadow: 2px 2px 2px gray;
 }
 
-.uploadBtn {
-  background-color: #7cb6a7;
-  border-color: #487065;
-  color: white;
-  text-shadow: 2px 2px 2px #3b5d54;
+.greenBtn {
+    background-color: #7cb6a7;
+    border-color: #487065;
+    color: white;
+    text-shadow: 2px 2px 2px #3b5d54;
 }
 
-.uploadBtn:hover {
-  background-color: #a5d9cb;
-  border-color: #68998b;
-  color: white;
+.greenBtn:hover {
+    background-color: #a5d9cb;
+    border-color: #68998b;
+    color: white;
 }
 
 .coverImagePreview {
-  height: 150px;
-}
-
-.closeBtn .close-button {
-  color: red;
+    height: 150px;
 }

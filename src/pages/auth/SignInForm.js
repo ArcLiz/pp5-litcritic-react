@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 import { useRedirect } from "../../hooks/useRedirect";
 import { setTokenTimestamp } from "../../utils/utils";
-import styles from "../../styles/SignInForm.module.css";
+import styles from "../../styles/Forms.module.css";
 
 const SignInForm = () => {
   const setCurrentUser = useSetCurrentUser();
@@ -83,7 +83,7 @@ const SignInForm = () => {
               )}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className={`${styles.loginBtn} mt-3 w-100`}>
+            <Button variant="primary" type="submit" className={`${styles.pinkBtn} mt-3 w-100`}>
               Sign In
             </Button>
 
