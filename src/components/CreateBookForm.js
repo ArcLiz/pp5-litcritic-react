@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, Button, Form, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
@@ -131,7 +131,6 @@ const CreateBookModal = ({ show, handleClose }) => {
             />
           </Form.Group>
           <Form.Group controlId="cover_image" className="mt-3 text-center">
-            {/* <Form.Label>Cover Image</Form.Label> */}
               <div className="mx-auto">
                 {imagePreview && (
                   <Image className={styles.coverImagePreview} src={imagePreview} fluid />
