@@ -82,6 +82,15 @@ const BookDetails = () => {
           <h1>{book.title}</h1>
           <p>By {book.author}</p>
           <hr />
+          {book.series && (
+          <p className="mb-0 small">{book.series} #{book.series_number}</p>
+        )}
+        <div className="d-flex justify-content-center mb-0">
+          {book.genres && book.genres.map((genre, index) => (
+            <p key={index} className={`${styles.genreTag} mx-1 p-1`}>#{genre}</p>
+          ))}
+        </div>
+
         </Col>
       </Row>
       <Row className="my-4 justify-content-around d-flex">

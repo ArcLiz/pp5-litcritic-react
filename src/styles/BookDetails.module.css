@@ -4,3 +4,10 @@
     border: 1px solid #a87585;
     box-shadow: 5px 5px 5px #a87585;
 }
+
+.genreTag {
+    color: #555;
+    font-family: "Patrick Hand", cursive;
+    font-size: 140%;
+    margin-bottom: -20px;
+}
