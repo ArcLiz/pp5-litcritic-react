@@ -27,9 +27,9 @@ const PopularBooks = () => {
     if (popularBooks.length === 0) return <div>Loading...</div>;
 
   return (
-    <Card className="custom-card">
-      <Card.Body className="custom-card-body">
-        <Card.Title className="custom-card-title">Popular Books</Card.Title>
+    <Card>
+      <Card.Body>
+        <Card.Title>Popular Books</Card.Title>
         <hr />
         {popularBooks.map((book) => (
             <Link to={`/books/${book.id}`} key={book.id} className={styles.bookLink}>

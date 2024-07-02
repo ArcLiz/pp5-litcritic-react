@@ -11,6 +11,19 @@
 
 }
 
+.App .mainContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #a87585;
+  box-shadow: 5px 5px 5px #a87585;
+}
+
+.App .plainContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #e4b7c5;
+}
+
 * {
   box-sizing: border-box;
 }

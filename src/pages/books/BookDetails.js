@@ -8,6 +8,8 @@ import LikeButton from "../../components/LikeButton";
 import CreateReviewForm from "../reviews/CreateReviewForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import styles from "../../styles/BookDetails.module.css";
+import PopularBooks from "../../components/PopularBooks";
+import bgImage from "../../assets/book-details-bg.png"
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -77,39 +79,40 @@ const BookDetails = () => {
 
   return (
     <Container>
-      <Row className={`${styles.mainContainer} text-center justify-content-center`}>
-        <Col md={10}>
-          <h1>{book.title}</h1>
-          <p>By {book.author}</p>
-          <hr />
-          {book.series && (
-          <p className="mb-0 small">{book.series} #{book.series_number}</p>
-        )}
-        <div className="d-flex justify-content-center mb-0">
-          {book.genres && book.genres.map((genre, index) => (
-            <p key={index} className={`${styles.genreTag} mx-1 p-1`}>#{genre}</p>
-          ))}
-        </div>
-
+      <Row className="d-flex text-center justify-content-center">
+        <Col lg={6} className="d-none d-lg-block">
+          <PopularBooks />
+        </Col>
+        <Col lg={6} className={`d-flex flex-column mb-3 justify-content-between ${styles.mainContainer}`}>
+            <div>
+              <h1>{book.title}</h1>
+              <p>By {book.author}</p>
+              <hr />
+              {book.series && (
+                <p className="mb-0 small">{book.series} #{book.series_number}</p>
+              )}
+              <div className="d-flex justify-content-center">
+                {book.genres && book.genres.map((genre, index) => (
+                  <p key={index} className={`${styles.genreTag} mx-1 p-1`}>#{genre}</p>
+                ))}
+              </div>
+            </div>
+            <div className="w-100 d-flex justify-content-center">
+              <img className={`mb-0 w-100 ${styles.backImg}`} src={bgImage} alt='stephen king quote' />
+            </div>
         </Col>
       </Row>
-      <Row className="my-4 justify-content-around d-flex">
-        <Col md={2}>
-          <img src={book.cover_image} alt={book.title} width={150} />
-        </Col>
-        <Col md={10}>
-          <Card>
-            <Card.Body>
-              <h4>Description</h4>
-              <p>{book.description}</p>
-            </Card.Body>
-          </Card>
+
+      <Row className="my-3">
+        <Col className={styles.plainContainer}>
+          <h4>Description</h4>
+          <p>{book.description}</p>
         </Col>
       </Row>
 
       <Row className={styles.mainContainer}>
         <Col>
-        {currentUser && (
+          {currentUser && (
             <div className={`${styles.reviewBtn} mt-2 d-flex justify-content-between`}>
               <h3 className="mb-4">Reviews</h3>
               {hasUserReviewedBook ? (
