@@ -23,11 +23,21 @@ const BooksList = () => {
     fetchBooks();
   }, []);
 
+
   useEffect(() => {
-    const results = books.filter((book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const results = books.filter((book) => {
+      const title = book.title ? book.title.toLowerCase() : '';
+      const author = book.author ? book.author.toLowerCase() : '';
+      const series = book.series ? book.series.toLowerCase() : '';
+      const genres = book.genres ? book.genres.map(genre => genre.toLowerCase()) : [];
+
+      return (
+        title.includes(searchTerm.toLowerCase()) ||
+        author.includes(searchTerm.toLowerCase()) ||
+        series.includes(searchTerm.toLowerCase()) ||
+        genres.some(genre => genre.includes(searchTerm.toLowerCase()))
+      );
+    });
     setSearchResults(results);
   }, [searchTerm, books]);
 
@@ -53,7 +63,7 @@ const BooksList = () => {
       <Form className="mb-3">
         <Form.Control
           type="text"
-          placeholder="Search by title or author..."
+          placeholder="Search..."
           value={searchTerm}
           onChange={handleChange}
         />
