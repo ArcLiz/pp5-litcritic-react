@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Button, Form, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
+import styles from '../styles/Forms.module.css';
+import tagStyles from '../styles/Tags.module.css'
+import defaultCover from '../assets/nocover.png'
 
 const CreateBookModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -15,13 +18,9 @@ const CreateBookModal = ({ show, handleClose }) => {
   });
 
   const [tags, setTags] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    const genresSuggestions = ['Fantasy', 'Science Fiction', 'Romance', 'Mystery', 'Thriller'];
-    setSuggestions(genresSuggestions.map(genre => ({ id: genre, text: genre })));
-  }, []);
+  const [imagePreview, setImagePreview] = useState(defaultCover);
+  const imageFile = useRef();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +29,9 @@ const CreateBookModal = ({ show, handleClose }) => {
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
-      setFormData({ ...formData, cover_image: e.target.files[0] });
+      const file = e.target.files[0];
+      setFormData({ ...formData, cover_image: file });
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -104,7 +105,7 @@ const CreateBookModal = ({ show, handleClose }) => {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title>Create a New Book</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -119,7 +120,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="author">
+          <Form.Group controlId="author" className="mt-3">
             <Form.Label>Author</Form.Label>
             <Form.Control
               type="text"
@@ -129,14 +130,24 @@ const CreateBookModal = ({ show, handleClose }) => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="cover_image">
-            <Form.Label>Cover Image</Form.Label>
-            <Form.File
-              name="cover_image"
-              onChange={handleFileChange}
-            />
+          <Form.Group controlId="cover_image" className="mt-3 text-center">
+            {/* <Form.Label>Cover Image</Form.Label> */}
+              <div className="mx-auto">
+                {imagePreview && (
+                  <Image className={styles.coverImagePreview} src={imagePreview} fluid />
+                )}
+              </div>
+              <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn my-auto`}>
+                Change Image
+              </Form.Label>
+                <Form.File
+                  name="cover_image"
+                  onChange={handleFileChange}
+                  ref={imageFile}
+                  className="d-none"
+                />
           </Form.Group>
-          <Form.Group controlId="description">
+          <Form.Group controlId="description" className="mt-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
@@ -146,7 +157,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="series">
+          <Form.Group controlId="series" className="mt-3">
             <Form.Label>Series</Form.Label>
             <Form.Control
               type="text"
@@ -155,7 +166,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="series_number">
+          <Form.Group controlId="series_number" className="mt-3">
             <Form.Label>Series Number</Form.Label>
             <Form.Control
               type="number"
@@ -164,24 +175,27 @@ const CreateBookModal = ({ show, handleClose }) => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="genres">
-            <Form.Label>Genres</Form.Label>
+          <Form.Group controlId="genres" className="mt-3">
+            <div className={`w-100 ${tagStyles.tagContainer}`}>
             <ReactTags
-              tags={tags}
-              suggestions={suggestions}
-              handleDelete={handleDelete}
-              handleAddition={handleAddition}
-              handleDrag={handleDrag}
-              handleTagClick={handleTagClick}
-              placeholder="Add genre(s)"
-            />
-            <div>
-              {formData.genres.map((genre, index) => (
-                <span key={index}>{genre}</span>
-              ))}
-            </div>
+                tags={tags}
+                handleDelete={handleDelete}
+                handleAddition={handleAddition}
+                handleDrag={handleDrag}
+                handleTagClick={handleTagClick}
+                classNames={{
+                  tags: tagStyles['react-tags'], 
+                  tagInput: tagStyles['react-tags__tag-input'],
+                  tag: tagStyles['react-tags__selected-tag'],
+                  remove: tagStyles['react-tags__remove'],
+                  suggestions: tagStyles['react-tags__suggestions'],
+                  activeSuggestion: tagStyles['react-tags__suggestions--active'],
+                }}
+                placeholder="Add genre(s)"
+              />
+              </div>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
             Create Book
           </Button>
         </Form>
@@ -189,11 +203,6 @@ const CreateBookModal = ({ show, handleClose }) => {
           <div key={index} className="text-danger mt-2">{error}</div>
         ))}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

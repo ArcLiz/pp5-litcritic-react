@@ -12,7 +12,7 @@ import ReaderPage from "./pages/readers/ReaderPage";
 import BookDetails from "./pages/books/BookDetails";
 import Home from "./pages/base/Home";
 import AdminBooks from "./pages/books/AdminBooks";
-import EditBookForm from "./components/EditBookForm";
+import EditBookForm from "./pages/books/EditBookForm";
 
 function App() {
   return (

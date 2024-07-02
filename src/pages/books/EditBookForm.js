@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { Col, Row, Container, Form, Button, Alert, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
-import styles from '../styles/Forms.module.css';
-import { useCurrentUser } from '../contexts/CurrentUserContext';
+import styles from '../../styles/Forms.module.css';
+import tagStyles from '../../styles/Tags.module.css'
 
 const EditBookForm = () => {
   const { id } = useParams();
@@ -20,15 +20,10 @@ const EditBookForm = () => {
   });
 
   const [tags, setTags] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
-  const currentUser = useCurrentUser();
-
-  useEffect(() => {
-    const genresSuggestions = ['Fantasy', 'Science Fiction', 'Romance', 'Mystery', 'Thriller'];
-    setSuggestions(genresSuggestions.map(genre => ({ id: genre, text: genre })));
-  }, []);
+  const [imagePreview, setImagePreview] = useState('');
+  const imageFile = useRef();
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -43,6 +38,7 @@ const EditBookForm = () => {
           series_number: data.series_number || '',
         });
         setTags(data.genres.map(genre => ({ id: genre, text: genre })));
+        setImagePreview(data.cover_image)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching book:', error);
@@ -59,6 +55,7 @@ const EditBookForm = () => {
 
   const handleFileChange = (e) => {
     setFormData({ ...formData, cover_image: e.target.files[0] });
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleDelete = i => {
@@ -113,7 +110,7 @@ const EditBookForm = () => {
       });
 
       console.log('Book updated:', response.data);
-      history.push(`/books/${id}`);
+      history.push(`/admin/books`);
     } catch (error) {
       console.error('Error updating book:', error);
       if (error.response && error.response.data) {
@@ -124,12 +121,13 @@ const EditBookForm = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  const isAdmin = currentUser?.is_admin;
+  const isAdmin = true;
 
   return (
     <Container>
       {isAdmin ? (
-        <div className={`${styles.mainContainer}`}>
+        <Row className="justify-content-center mt-2">
+        <Col xs={12} md={8} lg={6} className={styles.mainContainer}>
           <h1 className="mb-4 text-center">Edit Book</h1>
           {errors.non_field_errors && (
             <Alert variant="danger">{errors.non_field_errors}</Alert>
@@ -150,7 +148,7 @@ const EditBookForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="author">
+            <Form.Group controlId="author" className="mt-3">
               <Form.Label>Author</Form.Label>
               <Form.Control
                 type="text"
@@ -160,14 +158,23 @@ const EditBookForm = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="cover_image">
-              <Form.Label>Cover Image</Form.Label>
+            <Form.Group controlId="cover_image" className="mt-3 text-center">
+              <div className="mx-auto">
+                {imagePreview && (
+                  <Image className={styles.coverImagePreview} src={imagePreview} fluid />
+                )}
+              </div>
+              <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} mt-3 btn my-auto`}>
+                Change Image
+              </Form.Label>
               <Form.File
                 name="cover_image"
                 onChange={handleFileChange}
+                ref={imageFile}
+                className="d-none"
               />
             </Form.Group>
-            <Form.Group controlId="description">
+            <Form.Group controlId="description" className="mt-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 as="textarea"
@@ -177,7 +184,7 @@ const EditBookForm = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="series">
+            <Form.Group controlId="series" className="mt-3">
               <Form.Label>Series</Form.Label>
               <Form.Control
                 type="text"
@@ -186,7 +193,7 @@ const EditBookForm = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="series_number">
+            <Form.Group controlId="series_number"className="mt-3">
               <Form.Label>Series Number</Form.Label>
               <Form.Control
                 type="number"
@@ -195,30 +202,34 @@ const EditBookForm = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="genres">
-              <Form.Label>Genres</Form.Label>
+            <Form.Group controlId="genres" className="mt-3">
+              <div className={tagStyles.tagContainer}>
               <ReactTags
                 tags={tags}
-                suggestions={suggestions}
                 handleDelete={handleDelete}
                 handleAddition={handleAddition}
                 handleDrag={handleDrag}
                 handleTagClick={handleTagClick}
+                classNames={{
+                  tags: tagStyles['react-tags'],
+                  tagInput: tagStyles['react-tags__tag-input'],
+                  tag: tagStyles['react-tags__selected-tag'],
+                  remove: tagStyles['react-tags__remove'],
+                  suggestions: tagStyles['react-tags__suggestions'],
+                  activeSuggestion: tagStyles['react-tags__suggestions--active'],
+                }}
                 placeholder="Add genre(s)"
               />
-              <div>
-                {formData.genres.map((genre, index) => (
-                  <span key={index}>{genre}</span>
-                ))}
-              </div>
+                      </div>
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
               Save Changes
             </Button>
           </Form>
           <hr />
           <p className="text-center mb-0"><i className="fa-solid fa-book-open-reader"></i></p>
-        </div>
+        </Col>
+        </Row>
       ) : (
         <Alert variant="danger" className="text-center">
           You don't have permission to view this page.
