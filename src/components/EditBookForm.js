@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
-import { Row, Col, Container, Form, Button, Alert } from 'react-bootstrap';
-import styles from "../styles/Forms.module.css";
-import { useCurrentUser } from "../contexts/CurrentUserContext";
+import styles from '../styles/Forms.module.css';
+import { useCurrentUser } from '../contexts/CurrentUserContext';
 
 const EditBookForm = () => {
   const { id } = useParams();
   const history = useHistory();
-  const [book, setBook] = useState({
+  const [formData, setFormData] = useState({
     title: '',
     author: '',
+    cover_image: null,
     description: '',
-    cover_image: null
+    genres: [],
+    series: '',
+    series_number: '',
   });
-  const [loading, setLoading] = useState(true);
-  const [image, setImage] = useState(null);
+
+  const [tags, setTags] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
   const currentUser = useCurrentUser();
+
+  useEffect(() => {
+    const genresSuggestions = ['Fantasy', 'Science Fiction', 'Romance', 'Mystery', 'Thriller'];
+    setSuggestions(genresSuggestions.map(genre => ({ id: genre, text: genre })));
+  }, []);
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await axios.get(`/books/${id}/`);
-        setBook(response.data);
-        setImage(response.data.cover_image);
+        const { data } = await axios.get(`/books/${id}/`);
+        setFormData({
+          title: data.title,
+          author: data.author,
+          description: data.description,
+          genres: data.genres,
+          series: data.series || '',
+          series_number: data.series_number || '',
+        });
+        setTags(data.genres.map(genre => ({ id: genre, text: genre })));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching book:', error);
@@ -34,51 +52,75 @@ const EditBookForm = () => {
     fetchBook();
   }, [id]);
 
-  // handleImageChange and subsequent form group is adapted from Thomas Wharton's FragTube project
-
-  const handleImageChange = (e) => {
-    if (e.target.files.length) {
-      const file = e.target.files[0];
-      setImage(URL.createObjectURL(file));
-      handleChange(e);
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: files ? files[0] : value
-    }));
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, cover_image: e.target.files[0] });
+  };
+
+  const handleDelete = i => {
+    const updatedTags = tags.filter((tag, index) => index !== i);
+    setTags(updatedTags);
+    setFormData({ ...formData, genres: updatedTags.map(tag => tag.text) });
+  };
+
+  const handleAddition = tag => {
+    const updatedTags = [...tags, tag];
+    setTags(updatedTags);
+    setFormData({ ...formData, genres: updatedTags.map(tag => tag.text) });
+  };
+
+  const handleDrag = (tag, currPos, newPos) => {
+    const newTags = tags.slice();
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+    setTags(newTags);
+    setFormData({ ...formData, genres: newTags.map(tag => tag.text) });
+  };
+
+  const handleTagClick = (index) => {
+    console.log('The tag at index ' + index + ' was clicked');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', book.title);
-    formData.append('author', book.author);
-    formData.append('description', book.description);
-    
-    if (book.cover_image instanceof File) {
-      formData.append('cover_image', book.cover_image);
-    }
-  
+
     try {
-      const response = await axios.put(`/books/${id}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('author', formData.author);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('series', formData.series);
+      formDataToSend.append('series_number', formData.series_number);
+
+      formData.genres.forEach(genre => {
+        formDataToSend.append('genres', genre);
       });
-      
-      setBook(response.data);
-      history.push('/admin/books');
+
+      if (formData.cover_image) {
+        formDataToSend.append('cover_image', formData.cover_image);
+      }
+
+      console.log('Request data:', formDataToSend);
+
+      const response = await axios.put(`/books/${id}/`, formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Book updated:', response.data);
+      history.push(`/books/${id}`);
     } catch (error) {
       console.error('Error updating book:', error);
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       }
     }
-  }
+  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -87,103 +129,101 @@ const EditBookForm = () => {
   return (
     <Container>
       {isAdmin ? (
-        <>
-      <Row className="justify-content-center mt-2">
-        <Col xs={12} md={8} lg={6} className={`${styles.mainContainer}`}>
+        <div className={`${styles.mainContainer}`}>
           <h1 className="mb-4 text-center">Edit Book</h1>
           {errors.non_field_errors && (
             <Alert variant="danger">{errors.non_field_errors}</Alert>
           )}
           <p className="text-muted small text-center">
-            Edit the details of <strong>{book.title}</strong> below.<br />
+            Edit the details of <strong>{formData.title}</strong> below.<br />
             Make sure that all details are accurate, including the book's cover image.
           </p>
           <hr />
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formTitle">
-              <Form.Label className="mt-2 ms-1 mb-0">Title</Form.Label>
+            <Form.Group controlId="title">
+              <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
                 name="title"
-                value={book.title}
-                onChange={handleChange}
+                value={formData.title}
+                onChange={handleInputChange}
                 required
               />
-              {errors.title && (
-                <Alert variant="danger">{errors.title}</Alert>
-              )}
             </Form.Group>
-
-            <Form.Group controlId="formAuthor">
-              <Form.Label className="mt-2 ms-1 mb-0">Author</Form.Label>
+            <Form.Group controlId="author">
+              <Form.Label>Author</Form.Label>
               <Form.Control
                 type="text"
                 name="author"
-                value={book.author}
-                onChange={handleChange}
+                value={formData.author}
+                onChange={handleInputChange}
                 required
               />
-              {errors.author && (
-                <Alert variant="danger">{errors.author}</Alert>
-              )}
             </Form.Group>
-
-            <Form.Group controlId="formDescription">
-              <Form.Label className="mt-2 ms-1 mb-0">Description</Form.Label>
+            <Form.Group controlId="cover_image">
+              <Form.Label>Cover Image</Form.Label>
+              <Form.File
+                name="cover_image"
+                onChange={handleFileChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="description">
+              <Form.Label>Description</Form.Label>
               <Form.Control
                 as="textarea"
+                rows={3}
                 name="description"
-                value={book.description}
-                onChange={handleChange}
-                required
-                rows={7}
+                value={formData.description}
+                onChange={handleInputChange}
               />
-              {errors.description && (
-                <Alert variant="danger">{errors.description}</Alert>
-              )}
             </Form.Group>
-
-            <Form.Group>
-              {image && (
-                <figure className="text-center mb-3">
-                  <img src={image} alt="Preview" height="150px" className={`${styles.coverImagePreview} mt-3`} />
-                </figure>
-              )}
-              <div className="text-center">
-                <Form.Label
-                  className={`${styles.greenBtn} btn my-auto`}
-                  htmlFor="cover_image"
-                >
-                  Change the image
-                </Form.Label>
-              </div>
+            <Form.Group controlId="series">
+              <Form.Label>Series</Form.Label>
               <Form.Control
-                type="file"
-                id="cover_image"
-                name="cover_image"
-                onChange={handleImageChange}
-                className="d-none"
+                type="text"
+                name="series"
+                value={formData.series}
+                onChange={handleInputChange}
               />
-              {errors.cover_image && (
-                <Alert variant="danger">{errors.cover_image}</Alert>
-              )}
             </Form.Group>
-
-            <Button variant="primary" type="submit" className={`${styles.pinkBtn} mt-3 w-100`}>
+            <Form.Group controlId="series_number">
+              <Form.Label>Series Number</Form.Label>
+              <Form.Control
+                type="number"
+                name="series_number"
+                value={formData.series_number}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="genres">
+              <Form.Label>Genres</Form.Label>
+              <ReactTags
+                tags={tags}
+                suggestions={suggestions}
+                handleDelete={handleDelete}
+                handleAddition={handleAddition}
+                handleDrag={handleDrag}
+                handleTagClick={handleTagClick}
+                placeholder="Add genre(s)"
+              />
+              <div>
+                {formData.genres.map((genre, index) => (
+                  <span key={index}>{genre}</span>
+                ))}
+              </div>
+            </Form.Group>
+            <Button variant="primary" type="submit">
               Save Changes
             </Button>
           </Form>
           <hr />
           <p className="text-center mb-0"><i className="fa-solid fa-book-open-reader"></i></p>
-        </Col>
-      </Row>
-      </>
-    ) : (
-      <Alert variant="danger" className="text-center">
-        You sneaky sneak! You don't have permission to view this page.
-      </Alert>
-    )}
-
+        </div>
+      ) : (
+        <Alert variant="danger" className="text-center">
+          You don't have permission to view this page.
+        </Alert>
+      )}
     </Container>
   );
 };
