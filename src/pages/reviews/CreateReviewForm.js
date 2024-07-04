@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import StarRatingInput from '../../components/StarRatingInput';
+import styles from '../../styles/Forms.module.css'
 
 const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
   const [rating, setRating] = useState(0);
@@ -48,10 +49,10 @@ const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{initialReview ? 'Edit Review' : 'Create Review'}</Modal.Title>
-      </Modal.Header>
       <Modal.Body>
+        <h1>{initialReview ? 'Edit Review' : 'Create Review'}</h1>
+        <p className="text-muted small">Let other users know exactly what you think about this book!</p>
+        <hr />
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="reviewRating">
             <Form.Label>Rating</Form.Label>
@@ -71,7 +72,7 @@ const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="mt-3">
+          <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
             {initialReview ? 'Update' : 'Submit'}
           </Button>
         </Form>
