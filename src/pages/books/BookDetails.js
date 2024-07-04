@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Row, Col, Accordion, Card, Dropdown, Image } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import StarRating from "../../components/StarRating";
 import Avatar from "../../components/Avatar";
 import LikeButton from "../../components/LikeButton";
@@ -20,6 +20,7 @@ const BookDetails = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [editReviewId, setEditReviewId] = useState(null);
   const currentUser = useCurrentUser();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchBookAndReviews = async () => {
@@ -104,6 +105,12 @@ const BookDetails = () => {
               </div>
               <div className="w-100 d-flex justify-content-center">
                 <img className={`mb-0 w-100 ${styles.backImg}`} src={bgImage} alt='stephen king quote' />
+              </div>
+              <div className="ms-auto">
+              {currentUser.is_admin && 
+                <span onClick={() => history.push(`/admin/books/edit/${id}`)} className={`${styles.editBtn}`}>
+                  <i className="fa-solid fa-wrench text-end"></i>
+                </span>}
               </div>
             </Col>
           </Row>
