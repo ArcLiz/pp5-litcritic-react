@@ -3,8 +3,8 @@ import { Modal, Button, Form, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
 import styles from '../styles/Forms.module.css';
-import tagStyles from '../styles/Tags.module.css'
-import defaultCover from '../assets/nocover.png'
+import tagStyles from '../styles/Tags.module.css';
+import defaultCover from '../assets/nocover.png';
 
 const CreateBookModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +20,7 @@ const CreateBookModal = ({ show, handleClose }) => {
   const [tags, setTags] = useState([]);
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(defaultCover);
+  const [isSeries, setIsSeries] = useState(false);
   const imageFile = useRef();
 
   const handleInputChange = (e) => {
@@ -156,24 +157,47 @@ const CreateBookModal = ({ show, handleClose }) => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="series" className="mt-3">
-            <Form.Label>Series</Form.Label>
-            <Form.Control
-              type="text"
-              name="series"
-              value={formData.series}
-              onChange={handleInputChange}
+          <Form.Group controlId="isSeries" className="mt-3">
+            <Form.Label>Is this book a part of a series?</Form.Label>
+            <Form.Check 
+              type="radio" 
+              label="Yes" 
+              name="isSeries" 
+              id="isSeriesYes" 
+              checked={isSeries} 
+              onChange={() => setIsSeries(true)} 
+            />
+            <Form.Check 
+              type="radio" 
+              label="No" 
+              name="isSeries" 
+              id="isSeriesNo" 
+              checked={!isSeries} 
+              onChange={() => setIsSeries(false)} 
             />
           </Form.Group>
-          <Form.Group controlId="series_number" className="mt-3">
-            <Form.Label>Series Number</Form.Label>
-            <Form.Control
-              type="number"
-              name="series_number"
-              value={formData.series_number}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+          {isSeries && (
+            <>
+              <Form.Group controlId="series" className="mt-3">
+                <Form.Label>Name of Series</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="series"
+                  value={formData.series}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="series_number" className="mt-3">
+                <Form.Label>The Books # in the Series</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="series_number"
+                  value={formData.series_number}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </>
+          )}
           <Form.Group controlId="genres" className="mt-3">
             <div className={`w-100 ${tagStyles.tagContainer}`}>
             <ReactTags
