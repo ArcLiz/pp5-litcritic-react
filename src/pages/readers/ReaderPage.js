@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Dropdown, Card, Accordion, Row, Container } from "react-bootstrap";
 import { useParams } from "react-router";
 import ReaderDetails from "./ReaderDetails";
@@ -12,6 +12,7 @@ import CreateReviewForm from "../reviews/CreateReviewForm"
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import axios from "axios";
 import ActivityFeed from "../../components/ActivityFeed";
+import NoCurrentUser from "../../components/NoCurrentUser";
 
 
 const ReaderPage = () => {
@@ -22,7 +23,6 @@ const ReaderPage = () => {
   const [showEditReviewModal, setShowEditReviewModal] = useState(false);
   const [editReviewId, setEditReviewId] = useState(null);
   const [currentReview, setCurrentReview] = useState(null);
-  const contentRef = useRef(null);
 
   const { pageProfile } = useProfileData();
   const [profile] = pageProfile.results;
@@ -101,15 +101,21 @@ const ReaderPage = () => {
     }
   };
 
+  if (!currentUser) {
+    return <NoCurrentUser />;
+  }
+
   return (
     <Container>
       {loading ? (
         <Asset spinner />
       ) : (
         <>
-        <Row>
-          <Col sm={5}><ActivityFeed profile={profile}/></Col>
-          <ReaderDetails profile={profile} />
+          <Row>
+            <Col sm={5}>
+              <ActivityFeed profile={profile} />
+            </Col>
+            <ReaderDetails profile={profile} />
           </Row>
 
           <Row className="mt-4">
@@ -139,11 +145,11 @@ const ReaderPage = () => {
                             <img
                               src={review.book_detail.cover_image}
                               alt={`Cover for ${review.book_detail.title}`}
-                              style={{ maxHeight: "150px", width: "auto" }}
+                              style={{ maxHeight: '150px', width: 'auto' }}
                             />
                           </Col>
                           <Col sm={8}>
-                            <div ref={contentRef}>
+                            <div>
                               <p>{review.comment}</p>
                             </div>
                           </Col>
