@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import { Modal, Button, Form, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import axios from 'axios';
-import styles from '../styles/Forms.module.css';
-import tagStyles from '../styles/Tags.module.css';
-import defaultCover from '../assets/nocover.png';
+import styles from '../../styles/Forms.module.css';
+import tagStyles from '../../styles/Tags.module.css';
+import defaultCover from '../../assets/nocover.png';
 
 const CreateBookModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -132,20 +132,20 @@ const CreateBookModal = ({ show, handleClose }) => {
             />
           </Form.Group>
           <Form.Group controlId="cover_image" className="mt-3 text-center">
-              <div className="mx-auto">
-                {imagePreview && (
-                  <Image className={styles.coverImagePreview} src={imagePreview} fluid />
-                )}
-              </div>
-              <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn my-auto`}>
-                Change Image
-              </Form.Label>
-                <Form.File
-                  name="cover_image"
-                  onChange={handleFileChange}
-                  ref={imageFile}
-                  className="d-none"
-                />
+            <div className="mx-auto">
+              {imagePreview && (
+                <Image className={styles.coverImagePreview} src={imagePreview} fluid />
+              )}
+            </div>
+            <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn my-auto`}>
+              Change Image
+            </Form.Label>
+            <Form.File
+              name="cover_image"
+              onChange={handleFileChange}
+              ref={imageFile}
+              className="d-none"
+            />
           </Form.Group>
           <Form.Group controlId="description" className="mt-3">
             <Form.Label>Description</Form.Label>
@@ -159,21 +159,21 @@ const CreateBookModal = ({ show, handleClose }) => {
           </Form.Group>
           <Form.Group controlId="isSeries" className="mt-3">
             <Form.Label>Is this book a part of a series?</Form.Label>
-            <Form.Check 
-              type="radio" 
-              label="Yes" 
-              name="isSeries" 
-              id="isSeriesYes" 
-              checked={isSeries} 
-              onChange={() => setIsSeries(true)} 
+            <Form.Check
+              type="radio"
+              label="Yes"
+              name="isSeries"
+              id="isSeriesYes"
+              checked={isSeries}
+              onChange={() => setIsSeries(true)}
             />
-            <Form.Check 
-              type="radio" 
-              label="No" 
-              name="isSeries" 
-              id="isSeriesNo" 
-              checked={!isSeries} 
-              onChange={() => setIsSeries(false)} 
+            <Form.Check
+              type="radio"
+              label="No"
+              name="isSeries"
+              id="isSeriesNo"
+              checked={!isSeries}
+              onChange={() => setIsSeries(false)}
             />
           </Form.Group>
           {isSeries && (
@@ -200,14 +200,14 @@ const CreateBookModal = ({ show, handleClose }) => {
           )}
           <Form.Group controlId="genres" className="mt-3">
             <div className={`w-100 ${tagStyles.tagContainer}`}>
-            <ReactTags
+              <ReactTags
                 tags={tags}
                 handleDelete={handleDelete}
                 handleAddition={handleAddition}
                 handleDrag={handleDrag}
                 handleTagClick={handleTagClick}
                 classNames={{
-                  tags: tagStyles['react-tags'], 
+                  tags: tagStyles['react-tags'],
                   tagInput: tagStyles['react-tags__tag-input'],
                   tag: tagStyles['react-tags__selected-tag'],
                   remove: tagStyles['react-tags__remove'],
@@ -216,7 +216,8 @@ const CreateBookModal = ({ show, handleClose }) => {
                 }}
                 placeholder="Add genre(s)"
               />
-              </div>
+            </div>
+            <p className="text-muted small ps-1">Add genre(s) by pressing Enter between each</p>
           </Form.Group>
           <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
             Create Book
