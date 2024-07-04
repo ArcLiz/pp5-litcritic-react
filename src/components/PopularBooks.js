@@ -27,7 +27,8 @@ const PopularBooks = () => {
     if (popularBooks.length === 0) return <div>Loading...</div>;
 
   return (
-    <Card>
+    <>
+    <Card className="d-none d-sm-block">
       <Card.Body>
         <Card.Title>Popular Books</Card.Title>
         <hr />
@@ -49,6 +50,30 @@ const PopularBooks = () => {
         ))}
       </Card.Body>
     </Card>
+    <Card className="d-block d-md-none">
+    <Card.Body>
+      <Card.Title>Popular Books</Card.Title>
+      <hr />
+      {popularBooks.map((book) => (
+          <Link to={`/books/${book.id}`} key={book.id} className={styles.bookLink}>
+        <Row key={book.id} className={`${styles.bookRow} my-1`}>
+          <Col xs={3} className="text-center">
+            <img className={styles.coverImg} src={book.cover_image} alt={book.title} />
+          </Col>
+          <Col xs={9}>
+            <div>
+              <p className="small m-0"><strong>{book.title}</strong></p>
+              <p className="small m-0"><em>{book.author}</em></p>
+              <p className="small m-0">{book.description.substring(0, 50)}
+              {book.description.length > 50 ? "..." : ""}</p>
+            </div>
+          </Col>
+        </Row>
+        </Link>
+      ))}
+    </Card.Body>
+  </Card>
+  </>
   );
 };
 
