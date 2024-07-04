@@ -7,7 +7,7 @@ import styles from "../../styles/FollowButton.module.css";
 import Asset from "../../components/Asset";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-const NewestUser = () => {
+const NewestUsers = () => {
   const { popularProfiles } = useProfileData();
   const { handleFollow, handleUnfollow } = useSetProfileData();
   const currentUser = useCurrentUser();
@@ -25,16 +25,16 @@ const NewestUser = () => {
         <hr />
         {sortedProfiles.slice(0, 5).map((user) => (
           <Row key={user.id} className={`${styles.newUser} mb-2 align-items-center`}>
-            <Col xs={2} className="text-right">
+            <Col xs={2}>
               <Link to={`/readers/${user.id}`} className={`${styles.newUser} text-decoration-none mb-3`}>
                 <Avatar src={user.image} height={40} />
               </Link>
             </Col>
-            <Col xs={6}>
+            <Col xs={7}>
               <div>@{user.owner}</div>
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
-            <Col xs={4} className="text-end">
+            <Col xs={3} className="text-end">
               {currentUser && (
                 user?.following_id ? (
                   <span
@@ -60,4 +60,4 @@ const NewestUser = () => {
   );
 };
 
-export default NewestUser;
+export default NewestUsers;
