@@ -20,3 +20,7 @@
     max-width: 400px; 
     margin-bottom: -20px;
 }
+
+.coverImage {
+    max-width: 200px;
+}
