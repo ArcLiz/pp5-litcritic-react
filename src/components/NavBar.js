@@ -28,7 +28,6 @@ const NavBar = () => {
       console.log(err);
     }
   };
-
   return (
     <>
       <Navbar expanded={expanded} className={` p-0 ${styles.NavBar}`} expand="md" fixed="top">
@@ -52,17 +51,40 @@ const NavBar = () => {
             <Nav className="ms-auto text-left">
               {currentUser ? (
                 <>
-                  <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/books">
-                    <i className="fa-solid fa-book"></i>Books
+                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/books">
+                  <span className="d-flex d-md-block align-items-center">
+                    <i className="fa-solid fa-home pb-0"></i><p className="m-0 p-0 small">Home</p>
+                  </span>
                   </NavLink>
-                  <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/readers">
-                    <i className="fa-solid fa-book-open-reader"></i>Readers
+                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/books">
+                  <span className="d-flex d-md-block align-items-center">
+                    <i className="fa-solid fa-book pb-0"></i><p className="m-0 p-0 small">Books</p>
+                  </span>
                   </NavLink>
-                  <NavLink className={styles.NavLink} to="/" onClick={handleSignOut}>
-                    <i className="fas fa-sign-out-alt"></i>Sign out
+                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/readers">
+                  <span className="d-flex d-md-block align-items-center">
+                    <i className="fa-solid fa-book-open-reader pb-0"></i><p className=" m-0 p-0 small">Readers</p>
+                    </span>
                   </NavLink>
-                  <NavLink className={styles.NavLink} to={`/readers/${currentUser?.pk}`}>
-                    <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
+                  {currentUser.is_admin && (
+                    <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/admin/books">
+                      <span className="d-flex d-md-block align-items-center">
+                      <i className="fa-solid fa-user-shield pb-0"></i><p className=" m-0 p-0 small">Admin</p>
+                      </span>
+                    </NavLink>
+                  )}
+                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} to="/" onClick={handleSignOut}>
+                  <span className="d-flex d-md-block align-items-center">
+                    <i className="fas fa-sign-out-alt pb-0"></i><p className=" m-0 p-0 small">Sign Out</p>
+                    </span>
+                  </NavLink>
+                  <NavLink className={`d-none d-md-block text-start text-lg-center mx-2 ${styles.NavLink}`} to={`/readers/${currentUser?.pk}`}>
+                  <span className="d-flex d-md-block align-items-center p-0">
+                    <Avatar src={currentUser?.profile_image} height={33}/><p className="m-0 p-0 small">Profile</p>
+                    </span>
+                  </NavLink>
+                  <NavLink className={`d-block d-md-none text-start text-lg-center ps-0 mx-2 ${styles.NavLink}`} to={`/readers/${currentUser?.pk}`}>
+                    <Avatar src={currentUser?.profile_image} text='Profile' height={35}/>
                   </NavLink>
                 </>
               ) : (
