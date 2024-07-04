@@ -6,22 +6,61 @@
   font-family: "Mulish", sans-serif;
 }
 
+.GreenApp {
+  background-color: #ecfff1;
+  min-height: 100vh;
+  font-family: "Mulish", sans-serif;
+}
+
 .Main {
   padding-top: 100px;
 
 }
 
-.App .mainContainer {
+.mainContainer {
   background-color: white;
   padding: 25px;
   border: 1px solid #a87585;
   box-shadow: 5px 5px 5px #a87585;
 }
 
-.App .plainContainer {
+.greenContainer {
+  background-color: white;
+  padding: 25px;
+  border: 1px solid #75a886;
+  box-shadow: 5px 5px 5px #75a890;
+}
+
+
+.plainContainer {
   background-color: white;
   padding: 25px;
   border: 1px solid #e4b7c5;
+}
+
+.pinkBtn {
+  background-color: #a87585;
+  border-color: rgb(104, 60, 74);
+  text-shadow: 2px 2px 2px rgb(104, 60, 74);
+}
+
+.pinkBtn:hover {
+  background-color: #c08799;
+  border-color: #b67c8e;
+  text-shadow: 2px 2px 2px gray;
+}
+
+.greenBtn {
+  background-color: #7cb6a7;
+  border-color: #487065;
+  color: white;
+  text-shadow: 2px 2px 2px #3b5d54;
+}
+
+.greenBtn:hover {
+  background-color: #a5d9cb;
+  border-color: #68998b;
+  color: white;
 }
 
 * {

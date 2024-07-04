@@ -67,7 +67,7 @@ const NavBar = () => {
                     </span>
                   </NavLink>
                   {currentUser.is_admin && (
-                    <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/admin/books">
+                    <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/admin">
                       <span className="d-flex d-md-block align-items-center">
                       <i className="fa-solid fa-user-shield pb-0"></i><p className=" m-0 p-0 small">Admin</p>
                       </span>

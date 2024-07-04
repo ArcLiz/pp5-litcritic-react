@@ -1,9 +1,10 @@
+import React from "react";
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
 import styles from "./App.module.css";
 import NavBar from "./components/NavBar";
 import Container from "react-bootstrap/Container";
-import {Route, Switch} from "react-router-dom";
 import "./api/axiosDefaults";
-import "./styles/CustomDropdown.css"
+import "./styles/CustomDropdown.css";
 import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
 import BooksList from "./pages/books/BookList";
@@ -11,12 +12,24 @@ import ReaderList from "./pages/readers/ReaderList";
 import ReaderPage from "./pages/readers/ReaderPage";
 import BookDetails from "./pages/books/BookDetails";
 import Home from "./pages/base/Home";
-import AdminBooks from "./pages/books/AdminBooks";
+import AdminPanel from "./pages/admin/AdminPanel";
 import EditBookForm from "./pages/books/EditBookForm";
 
 function App() {
   return (
-    <div className={styles.App}>
+    <Router>
+      <MainContainer />
+    </Router>
+  );
+}
+
+const MainContainer = () => {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
+  const appClass = isAdminPath ? styles.GreenApp : styles.App;
+
+  return (
+    <div className={appClass}>
       <NavBar />
       <Container className={styles.Main}>
         <Switch>
@@ -27,13 +40,13 @@ function App() {
           <Route exact path="/books/:id" render={() => <BookDetails />} />
           <Route exact path="/readers" render={() => <ReaderList/> } />
           <Route exact path="/readers/:id" render={() => <ReaderPage /> } />
-          <Route exact path="/admin/books" render={() => <AdminBooks /> } />
+          <Route exact path="/admin" render={() => <AdminPanel /> } />
           <Route exact path="/admin/books/edit/:id" render={() => <EditBookForm /> } />
           <Route render={() => <p>Page not found!</p>} />
         </Switch>
       </Container>
     </div>
   );
-}
+};
 
 export default App;
