@@ -85,7 +85,7 @@ const BookDetails = () => {
       ) : (
         <>
           <Row className="d-flex text-center justify-content-center">
-            <Col lg={6} className="d-none d-lg-block">
+            <Col lg={6} className="d-none d-lg-block text-start">
               <PopularBooks />
             </Col>
             <Col lg={6} className={`d-flex flex-column mb-3 justify-content-between ${styles.mainContainer}`}>
