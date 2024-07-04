@@ -51,7 +51,7 @@ const NavBar = () => {
             <Nav className="ms-auto text-left">
               {currentUser ? (
                 <>
-                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} to="/books">
+                  <NavLink className={`text-start text-lg-center mx-2 ${styles.NavLink}`} activeClassName={styles.Active} exact to="/">
                   <span className="d-flex d-md-block align-items-center">
                     <i className="fa-solid fa-home pb-0"></i><p className="m-0 p-0 small">Home</p>
                   </span>
