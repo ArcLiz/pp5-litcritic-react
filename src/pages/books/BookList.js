@@ -40,7 +40,20 @@ const BooksList = () => {
     const fetchFilteredBooks = async () => {
       try {
         const response = await axios.get(`/books/?search=${searchTerm}`);
-        setSearchResults(response.data.results);
+        let sortedResults = response.data.results;
+
+        sortedResults.sort((a, b) => {
+          if (a.series && b.series) {
+            if (a.series === b.series) {
+              return a.series_number - b.series_number;
+            }
+            return a.series.localeCompare(b.series);
+          } else {
+            return a.title.localeCompare(b.title);
+          }
+        });
+
+        setSearchResults(sortedResults);
       } catch (error) {
         console.error("Error fetching filtered books:", error);
       }
