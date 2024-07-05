@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
-import axios from 'axios';
 import StarRatingInput from '../../components/StarRatingInput';
 import styles from '../../styles/Forms.module.css'
+import { axiosReq } from '../../api/axiosDefaults';
 
 const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
   const [rating, setRating] = useState(0);
@@ -23,13 +23,13 @@ const CreateReviewForm = ({ bookId, show, handleClose, initialReview }) => {
 
     try {
       if (initialReview) {
-        await axios.put(`/reviews/${initialReview.id}/`, {
+        await axiosReq.put(`/reviews/${initialReview.id}/`, {
           rating,
           comment,
           book: bookId,
         });
       } else {
-        await axios.post('/reviews/', {
+        await axiosReq.post('/reviews/', {
           rating,
           comment,
           book: bookId,

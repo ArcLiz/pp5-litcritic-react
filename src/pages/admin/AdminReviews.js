@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Table, Button, Row, Col, Container, Alert } from "react-bootstrap";
 import styles from "../../styles/AdminPages.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Asset from "../../components/Asset";
+import { axiosRes, axiosReq } from "../../api/axiosDefaults";
 
 const AdminReviews = () => {
     const [reviews, setReviews] = useState([]);
@@ -29,7 +29,7 @@ const AdminReviews = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await axios.get("/reviews/");
+                const response = await axiosRes.get("/reviews/");
                 setReviews(response.data.results);
             } catch (error) {
                 console.error("Error fetching reviews:", error);
@@ -44,7 +44,7 @@ const AdminReviews = () => {
         const confirmed = window.confirm("Are you sure you want to delete this review?");
         if (confirmed) {
             try {
-                await axios.delete(`/reviews/${reviewId}/`);
+                await axiosReq.delete(`/reviews/${reviewId}/`);
                 setReviews(reviews.filter((review) => review.id !== reviewId));
                 setSearchResults(searchResults.filter((review) => review.id !== reviewId));
             } catch (error) {

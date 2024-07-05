@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { axiosReq } from "../../api/axiosDefaults";
 import { Table, Button, Row, Col, Form, Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import styles from "../../styles/AdminPages.module.css";
@@ -35,7 +35,7 @@ const AdminBooks = () => {
     const fetchBooks = async () => {
       setLoadingBooks(true);
       try {
-        const response = await axios.get(`/books/?page=${page}`);
+        const response = await axiosReq.get(`/books/?page=${page}`);
         if (page === 1) {
           setBooks({ results: response.data.results, next: response.data.next });
         } else {
@@ -66,7 +66,7 @@ const AdminBooks = () => {
     const fetchFilteredBooks = async () => {
       setLoadingBooks(true);
       try {
-        const response = await axios.get(`/books/?search=${searchTerm}&page=${page}`);
+        const response = await axiosReq.get(`/books/?search=${searchTerm}&page=${page}`);
         if (page === 1) {
           setBooks({ results: response.data.results, next: response.data.next });
         } else {
@@ -97,7 +97,7 @@ const AdminBooks = () => {
     const confirmed = window.confirm("Are you sure you want to delete this book?");
     if (confirmed) {
       try {
-        await axios.delete(`/books/${bookId}/`);
+        await axiosReq.delete(`/books/${bookId}/`);
         setBooks((prevBooks) => ({
           results: prevBooks.results.filter((book) => book.id !== bookId),
           next: prevBooks.next,
@@ -118,7 +118,7 @@ const AdminBooks = () => {
   const fetchMoreData = async () => {
     if (books.next) {
       try {
-        const response = await axios.get(books.next);
+        const response = await axiosReq.get(books.next);
         setBooks((prevBooks) => ({
           results: [...prevBooks.results, ...response.data.results],
           next: response.data.next,

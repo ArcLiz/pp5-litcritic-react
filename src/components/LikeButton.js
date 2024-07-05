@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
+import { axiosReq }  from "../api/axiosDefaults";
 import styles from "../styles/LikeButton.module.css";
 
 const LikeButton = ({ review, updateReview }) => {
   const handleLike = async (reviewId) => {
     try {
-      const { data } = await axios.post("/likes/", { review: reviewId });
+      const { data } = await axiosReq.post("/likes/", { review: reviewId });
 
       updateReview({
         ...review,
@@ -24,7 +24,7 @@ const LikeButton = ({ review, updateReview }) => {
         return;
       }
 
-      await axios.delete(`/likes/${likeId}`);
+      await axiosReq.delete(`/likes/${likeId}`);
 
       updateReview({
         ...review,

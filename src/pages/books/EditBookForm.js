@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Col, Row, Container, Form, Button, Alert, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
-import axios from 'axios';
 import styles from '../../styles/Forms.module.css';
 import tagStyles from '../../styles/Tags.module.css'
+import { axiosReq, axiosRes } from '../../api/axiosDefaults';
 
 const EditBookForm = () => {
   const { id } = useParams();
@@ -29,7 +29,7 @@ const EditBookForm = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const { data } = await axios.get(`/books/${id}/`);
+        const { data } = await axiosRes.get(`/books/${id}/`);
         setFormData({
           title: data.title,
           author: data.author,
@@ -105,7 +105,7 @@ const EditBookForm = () => {
 
       // console.log('Request data:', formDataToSend);
 
-      const response = await axios.put(`/books/${id}/`, formDataToSend, {
+      const response = await axiosReq.put(`/books/${id}/`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

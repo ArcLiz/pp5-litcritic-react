@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import styles from "../../styles/BookList.module.css";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset"
+import { axiosRes } from "../../api/axiosDefaults";
 
 const BooksList = () => {
   const [books, setBooks] = useState({ results: [], next: null });
@@ -15,7 +15,7 @@ const BooksList = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(`/books/?page=${page}`);
+        const response = await axiosRes.get(`/books/?page=${page}`);
         if (page === 1) {
           setBooks({ results: response.data.results, next: response.data.next });
         } else {
@@ -39,7 +39,7 @@ const BooksList = () => {
   useEffect(() => {
     const fetchFilteredBooks = async () => {
       try {
-        const response = await axios.get(`/books/?search=${searchTerm}`);
+        const response = await axiosRes.get(`/books/?search=${searchTerm}`);
         let sortedResults = response.data.results;
 
         sortedResults.sort((a, b) => {

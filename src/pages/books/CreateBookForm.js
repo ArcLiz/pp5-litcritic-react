@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, Form, Image } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
-import axios from 'axios';
 import styles from '../../styles/Forms.module.css';
 import tagStyles from '../../styles/Tags.module.css';
 import defaultCover from '../../assets/nocover.png';
+import { axiosReq } from '../../api/axiosDefaults';
 
 const CreateBookModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -86,7 +86,7 @@ const CreateBookModal = ({ show, handleClose }) => {
         formDataToSend.append('cover_image', '');
       }
   
-      const response = await axios.post('/books/create/', formDataToSend, {
+      const response = await axiosReq.post('/books/create/', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

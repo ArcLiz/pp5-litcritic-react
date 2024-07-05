@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { axiosReq } from "../api/axiosDefaults";
 import { Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "../styles/PopularBooks.module.css";
@@ -12,7 +12,7 @@ const PopularBooks = () => {
   useEffect(() => {
     const fetchPopularBooks = async () => {
       try {
-        const response = await axios.get("/books/");
+        const response = await axiosReq.get("/books/");
         const books = response.data.results || response.data;
 
         const sortedBooks = books.sort((a, b) => b.reviews_count - a.reviews_count);

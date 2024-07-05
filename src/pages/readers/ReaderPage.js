@@ -10,7 +10,6 @@ import StarRating from "../../components/StarRating";
 import LikeButton from "../../components/LikeButton";
 import CreateReviewForm from "../reviews/CreateReviewForm"
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-import axios from "axios";
 import ActivityFeed from "../../components/ActivityFeed";
 import NoCurrentUser from "../../components/NoCurrentUser";
 
@@ -78,7 +77,7 @@ const ReaderPage = () => {
     try {
       const confirmed = window.confirm("Are you sure you want to delete this review?");
       if (confirmed) {
-        await axios.delete(`/reviews/${reviewId}/`);
+        await axiosReq.delete(`/reviews/${reviewId}/`);
 
         setProfileReviews((prevReviews) => ({
           results: prevReviews.results.filter((review) => review.id !== reviewId),
@@ -91,7 +90,7 @@ const ReaderPage = () => {
 
   const handleUpdateReview = async (formData) => {
     try {
-      const response = await axios.put(`/reviews/${editReviewId}/`, formData);
+      const response = await axiosReq.put(`/reviews/${editReviewId}/`, formData);
       const updatedReview = response.data;
 
       updateReview(updatedReview);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Container, Row, Col, Accordion, Card, Dropdown, Image } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
 import StarRating from "../../components/StarRating";
@@ -11,6 +10,7 @@ import styles from "../../styles/BookDetails.module.css";
 import PopularBooks from "../../components/PopularBooks";
 import bgImage from "../../assets/book-details-bg.png"
 import NoCurrentUser from "../../components/NoCurrentUser";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -26,8 +26,8 @@ const BookDetails = () => {
     const fetchBookAndReviews = async () => {
       try {
         const [bookResponse, reviewsResponse] = await Promise.all([
-          axios.get(`/books/${id}/`),
-          axios.get(`/reviews/?book=${id}`),
+          axiosRes.get(`/books/${id}/`),
+          axiosRes.get(`/reviews/?book=${id}`),
         ]);
 
         setBook(bookResponse.data);
@@ -57,7 +57,7 @@ const BookDetails = () => {
     try {
       const confirmed = window.confirm("Are you sure you want to delete this review?");
       if (confirmed) {
-        await axios.delete(`/reviews/${reviewId}/`);
+        await axiosReq.delete(`/reviews/${reviewId}/`);
 
         const updatedReviews = reviews.filter((review) => review.id !== reviewId);
         setReviews(updatedReviews);

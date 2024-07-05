@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "../../styles/ReaderList.module.css";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset";
+import { axiosRes } from "../../api/axiosDefaults";
 
 const ReaderList = () => {
   const [profiles, setProfiles] = useState({ results: [], next: null });
@@ -15,7 +15,7 @@ const ReaderList = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await axios.get(`/profiles/?page=${page}`);
+        const response = await axiosRes.get(`/profiles/?page=${page}`);
         if (page === 1) {
           setProfiles({ results: response.data.results, next: response.data.next });
         } else {
@@ -39,7 +39,7 @@ const ReaderList = () => {
   useEffect(() => {
     const fetchFilteredProfiles = async () => {
       try {
-        const response = await axios.get(`/profiles/?search=${searchTerm}`);
+        const response = await axiosRes.get(`/profiles/?search=${searchTerm}`);
         setSearchResults(response.data.results);
       } catch (error) {
         console.error("Error fetching filtered profiles:", error);
