@@ -132,7 +132,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               required
             />
           </Form.Group>
-          <Form.Group className="mt-3 text-center">
+          <Form.Group controlId="cover_image" className="mt-3 text-center">
             <div className="mx-auto">
               {imagePreview && (
                 <Image className={styles.coverImagePreview} src={imagePreview} fluid />
