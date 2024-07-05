@@ -111,11 +111,13 @@ const ReaderPage = () => {
         <Asset spinner />
       ) : (
         <>
-          <Row>
-            <Col sm={5}>
+          <Row className="d-flex flex-column-reverse gap-3 flex-lg-row">
+            <Col>
               <ActivityFeed profile={profile} />
             </Col>
-            <ReaderDetails profile={profile} />
+            <Col className={styles.mainContainer}>
+              <ReaderDetails profile={profile} />
+            </Col>
           </Row>
 
           <Row className="mt-4">
@@ -126,36 +128,39 @@ const ReaderPage = () => {
                   <Card key={review.id}>
                     <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
                       <Row className="align-items-center">
-                        <Col sm={4}>
+                        <Col sm={4} className="d-none d-md-block">
                           <StarRating rating={review.rating} />
                         </Col>
-                        <Col sm={5}>{review.book_detail.title}</Col>
-                        <Col sm={3}>
-                          <p className="text-muted small text-end mb-0">
-                            Reviewed on: <br />
-                            {new Date(review.created_at).toLocaleDateString()}
-                          </p>
+                        <Col sm={5} xs={5} md={5}>
+                        <span className="d-flex align-items-center">
+                            <p className="my-0 d-none d-md-block">{review.book_detail.title}</p>
+                            <p className="text-muted small ms-2 my-0">(Click for details)</p>
+                           </span>
+                        </Col>
+                        <Col sm={7} xs={7} md={3}>
+                            <p className="text-muted small text-end mb-0">
+                              Reviewed on: <br />
+                              {new Date(review.created_at).toLocaleDateString()}
+                            </p>
                         </Col>
                       </Row>
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={index.toString()}>
-                      <Card.Body>
+                      <Card.Body className="pe-0 pb-0">
                         <Row>
-                          <Col sm={2}>
+                          <Col xs={2} className="d-none d-md-block">
                             <img
                               src={review.book_detail.cover_image}
                               alt={`Cover for ${review.book_detail.title}`}
                               style={{ maxHeight: '150px', width: 'auto' }}
                             />
                           </Col>
-                          <Col sm={8}>
-                            <div>
+                          <Col xs={9}>
                               <p>{review.comment}</p>
-                            </div>
                           </Col>
-                          <Col sm={1} className="ms-auto">
+                          <Col xs={1} className="d-flex flex-column justify-content-end mb-auto">
                             {currentUser?.pk === profile.id && (
-                              <Dropdown className="mt-auto">
+                              <Dropdown className="mt-auto ms-auto">
                                 <Dropdown.Toggle
                                   variant="secondary"
                                   id={`dropdown-${review.id}`}
@@ -174,10 +179,15 @@ const ReaderPage = () => {
                               </Dropdown>
                             )}
                           </Col>
-                          <Col sm={12} className="text-end">
-                            <LikeButton review={review} updateReview={updateReview} />
-                          </Col>
                         </Row>
+                        <Row className="mt-3">
+                            <Col xs={8} className="text-start d-block d-md-none">
+                              <StarRating rating={review.rating} />
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              <LikeButton review={review} updateReview={updateReview} />
+                            </Col>
+                          </Row>
                       </Card.Body>
                     </Accordion.Collapse>
                   </Card>
