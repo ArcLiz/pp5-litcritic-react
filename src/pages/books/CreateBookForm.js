@@ -57,52 +57,53 @@ const CreateBookModal = ({ show, handleClose }) => {
   };
 
   const handleTagClick = (index) => {
-    console.log('The tag at index ' + index + ' was clicked');
+    // console.log('The tag at index ' + index + ' was clicked');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('author', formData.author);
       formDataToSend.append('description', formData.description);
-
+  
       if (formData.series) {
         formDataToSend.append('series', formData.series);
       }
       if (formData.series_number) {
         formDataToSend.append('series_number', formData.series_number);
       }
-
+  
       formData.genres.forEach(genre => {
         formDataToSend.append('genres', genre);
       });
-
+  
       if (formData.cover_image) {
         formDataToSend.append('cover_image', formData.cover_image);
       } else {
         formDataToSend.append('cover_image', '');
       }
-
-      console.log('Request data:', formDataToSend);
-
+  
       const response = await axios.post('/books/create/', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      console.log('Book created:', response.data);
-      handleClose();
+      if (response.status === 201) {
+        handleClose();
+      } else {
+      }
+  
     } catch (error) {
-      console.error('Error creating book:', error);
       if (error.response && error.response.data) {
         setErrors(error.response.data);
       }
     }
   };
+  
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -131,7 +132,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="cover_image" className="mt-3 text-center">
+          <Form.Group className="mt-3 text-center">
             <div className="mx-auto">
               {imagePreview && (
                 <Image className={styles.coverImagePreview} src={imagePreview} fluid />
