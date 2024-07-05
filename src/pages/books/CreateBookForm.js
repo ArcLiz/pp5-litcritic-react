@@ -138,7 +138,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               )}
             </div>
             <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn my-auto`}>
-              Change Image
+              Upload Image
             </Form.Label>
             <Form.File
               name="cover_image"
