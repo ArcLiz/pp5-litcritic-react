@@ -147,11 +147,16 @@ const BookDetails = () => {
                     <Card key={review.id}>
                       <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
                         <Row className="align-items-center">
-                          <Col sm={4} className="d-none d-sm-block">
+                          <Col md={4} className="d-none d-md-block">
                             <StarRating rating={review.rating} />
                           </Col>
-                          <Col sm={5} xs={5}>{review.owner}</Col>
-                          <Col sm={3} xs={7}>
+                          <Col sm={5} xs={5} md={5}>
+                          <span className="d-flex align-items-center">
+                            <p className="my-0 d-none d-md-block">{review.owner}</p>
+                            <p className="text-muted small ms-2 my-0">(Click for details)</p>
+                           </span>
+                          </Col>
+                          <Col sm={7} xs={7} md={3}>
                             <p className="text-muted small text-end mb-0">
                               Reviewed on: <br />
                               {new Date(review.created_at).toLocaleDateString()}
@@ -191,7 +196,7 @@ const BookDetails = () => {
                             </Col>
                           </Row>
                           <Row className="mt-3">
-                            <Col xs={8} className="text-start d-block d-sm-none">
+                            <Col xs={8} className="text-start d-block d-md-none">
                               <StarRating rating={review.rating} />
                             </Col>
                             <Col xs={4} sm={12} className="text-end">
