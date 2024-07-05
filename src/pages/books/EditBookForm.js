@@ -81,7 +81,7 @@ const EditBookForm = () => {
   };
 
   const handleTagClick = (index) => {
-    console.log('The tag at index ' + index + ' was clicked');
+    // console.log('The tag at index ' + index + ' was clicked');
   };
 
   const handleSubmit = async (e) => {
@@ -103,7 +103,7 @@ const EditBookForm = () => {
         formDataToSend.append('cover_image', formData.cover_image);
       }
 
-      console.log('Request data:', formDataToSend);
+      // console.log('Request data:', formDataToSend);
 
       const response = await axios.put(`/books/${id}/`, formDataToSend, {
         headers: {
@@ -111,7 +111,7 @@ const EditBookForm = () => {
         },
       });
 
-      console.log('Book updated:', response.data);
+      // console.log('Book updated:', response.data);
       history.goBack();
     } catch (error) {
       console.error('Error updating book:', error);
