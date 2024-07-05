@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import Avatar from "../../components/Avatar";
 import EditProfileForm from "../../components/EditProfileForm";
 import styles from "../../styles/ReaderDetails.module.css";
@@ -32,7 +32,7 @@ const ReaderDetails = ({ profile }) => {
   const isOwner = currentUser?.username === profile.owner;
 
   return (
-    <Col md={7} className={`${styles.mainContainer}`}>
+    <>
       <div className="d-flex justify-content-between">
         <div className="d-none d-sm-block">
           <Avatar src={profile.image} height={130} />
@@ -88,7 +88,7 @@ const ReaderDetails = ({ profile }) => {
         profile={profile}
         updateProfileData={updateProfileData}
       />
-    </Col>
+      </>
   );
 };
 
