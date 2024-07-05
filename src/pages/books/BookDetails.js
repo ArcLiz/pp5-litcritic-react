@@ -199,7 +199,7 @@ const BookDetails = () => {
                             <Col xs={8} className="text-start d-block d-md-none">
                               <StarRating rating={review.rating} />
                             </Col>
-                            <Col xs={4} className="text-end">
+                            <Col xs={4} md={12} className="text-end">
                               <LikeButton review={review} updateReview={updateReview} />
                             </Col>
                           </Row>
