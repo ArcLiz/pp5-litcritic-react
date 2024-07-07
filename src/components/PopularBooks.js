@@ -30,7 +30,7 @@ const PopularBooks = () => {
 
   return (
     <>
-      <Card className="d-none d-sm-block">
+      <Card className="d-none d-md-block">
         <Card.Body>
           <Card.Title>Popular Books</Card.Title>
           <hr />
