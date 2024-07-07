@@ -88,9 +88,32 @@ const AdminBooks = () => {
     }
   }, [searchTerm, page]);
 
+  useEffect(() => {
+    if (searchTerm === "") {
+      const fetchBooks = async () => {
+        setLoadingBooks(true);
+        try {
+          const response = await axiosReq.get(`/books/?page=1`);
+          setBooks({ results: response.data.results, next: response.data.next });
+          setSearchResults(response.data.results);
+        } catch (error) {
+          console.error("Error fetching books:", error);
+        } finally {
+          setLoadingBooks(false);
+        }
+      };
+      fetchBooks();
+    }
+  }, [searchTerm]);
+
   const handleChange = (event) => {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
+  };
+
+  const handleReset = () => {
+    setSearchTerm("");
+    setPage(1);
   };
 
   const handleDelete = async (bookId) => {
@@ -161,12 +184,21 @@ const AdminBooks = () => {
             </Col>
           </Row>
           <Form className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Search.."
-              value={searchTerm}
-              onChange={handleChange}
-            />
+          <Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Search.."
+                  value={searchTerm}
+                  onChange={handleChange}
+                />
+              </Col>
+              <Col xs="auto">
+                <Button variant="secondary" onClick={handleReset}>
+                  Reset Search
+                </Button>
+              </Col>
+            </Row>
           </Form>
           {loadingBooks ? ( 
             <div className="text-center">
