@@ -7,7 +7,7 @@ import defaultCover from '../../assets/nocover.png';
 import { axiosReq } from '../../api/axiosDefaults';
 
 const CreateBookModal = ({ show, handleClose }) => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     title: '',
     author: '',
     cover_image: null,
@@ -15,7 +15,8 @@ const CreateBookModal = ({ show, handleClose }) => {
     genres: [],
     series: '',
     series_number: '',
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const [tags, setTags] = useState([]);
   const [errors, setErrors] = useState({});
@@ -93,6 +94,10 @@ const CreateBookModal = ({ show, handleClose }) => {
       });
 
       if (response.status === 201) {
+        setFormData(initialFormData);
+        setTags([]);
+        setImagePreview(defaultCover);
+        setIsSeries(false);
         handleClose();
       } else {
       }
@@ -138,7 +143,7 @@ const CreateBookModal = ({ show, handleClose }) => {
                 <Image className={styles.coverImagePreview} src={imagePreview} fluid />
               )}
             </div>
-            <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn my-auto`}>
+            <Form.Label htmlFor="cover_image" className={`${styles.greenBtn} btn mt-2 my-auto`}>
               Upload Image
             </Form.Label>
             <Form.File
