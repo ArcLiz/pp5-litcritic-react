@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Modal, Button, Form, Image } from 'react-bootstrap';
+import { Modal, Button, Form, Image, Alert } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import styles from '../../styles/Forms.module.css';
 import tagStyles from '../../styles/Tags.module.css';
@@ -20,6 +20,7 @@ const CreateBookModal = ({ show, handleClose }) => {
 
   const [tags, setTags] = useState([]);
   const [errors, setErrors] = useState({});
+  const [alerts, setAlerts ] = useState({});
   const [imagePreview, setImagePreview] = useState(defaultCover);
   const [isSeries, setIsSeries] = useState(false);
   const imageFile = useRef();
@@ -63,6 +64,23 @@ const CreateBookModal = ({ show, handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const newAlerts = {};
+
+    if (!formData.title) {
+      newAlerts.title = "Title is required.";
+    }
+    if (!formData.author) {
+      newAlerts.author = "Author is required.";
+    }
+    if (!formData.description) {
+      newAlerts.description = "Description is required.";
+    }
+
+    if (Object.keys(newAlerts).length > 0) {
+      setAlerts(newAlerts);
+      return;
+    }
   
     try {
       const formDataToSend = new FormData();
@@ -116,7 +134,8 @@ const CreateBookModal = ({ show, handleClose }) => {
         <Modal.Title>Create a New Book</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} noValidate>
+        {alerts.title && <Alert variant="danger">{alerts.title}</Alert>}
           <Form.Group controlId="title">
             <Form.Label>Title</Form.Label>
             <Form.Control
@@ -127,6 +146,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               required
             />
           </Form.Group>
+          {alerts.author && <Alert variant="danger">{alerts.author}</Alert>}
           <Form.Group controlId="author" className="mt-3">
             <Form.Label>Author</Form.Label>
             <Form.Control
@@ -153,6 +173,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               className="d-none"
             />
           </Form.Group>
+          {alerts.description && <Alert variant="danger">{alerts.description}</Alert>}
           <Form.Group controlId="description" className="mt-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
