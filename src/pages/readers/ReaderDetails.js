@@ -38,7 +38,8 @@ const ReaderDetails = ({ profile }) => {
           <Avatar src={profile.image} height={130} />
         </div>
         <div>
-          <h1 className="text-center">{profile.owner}</h1>
+          <h1 className="text-center mb-0">{profile.owner}</h1>
+          <p className="text-muted text-center small">{profile.name}</p>
           <div className="d-flex justify-content-around">
             <p className="px-2 py-0 my-0 text-muted small">Followers</p>
             <p className="px-2 py-0 my-0 text-muted small">Following</p>
