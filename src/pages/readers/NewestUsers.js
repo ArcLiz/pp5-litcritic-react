@@ -35,7 +35,7 @@ const NewestUsers = () => {
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={3} className="text-end">
-              {currentUser && (
+              {currentUser?.pk !== user.id && (
                 user?.following_id ? (
                   <span
                     className={styles.followedUser}

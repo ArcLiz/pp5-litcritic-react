@@ -8,7 +8,6 @@ import Asset from "../../components/Asset";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-
 const PopularUsers = () => {
   const { popularProfiles } = useProfileData();
   const { handleFollow, handleUnfollow } = useSetProfileData();
@@ -18,8 +17,8 @@ const PopularUsers = () => {
     (a, b) => b.followers_count - a.followers_count
   );
 
-
   if (sortedProfiles.length === 0) return <Asset spinner />;
+
 
   return (
     <Card>
@@ -38,7 +37,7 @@ const PopularUsers = () => {
               <small className="text-muted">Joined on: {new Date(user.created_at).toLocaleDateString()}</small>
             </Col>
             <Col xs={3} className="text-end">
-              {currentUser && (
+              {currentUser?.pk !== user.id && (
                 user?.following_id ? (
                   <span
                     className={styles.followedUser}
