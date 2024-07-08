@@ -74,14 +74,14 @@ For my first submission of this project, I made an agile project board that can 
 - As a registered user I want to be able to log into the site
 - As a logged in user I want to be able to log out from the site
 
-#### Books
+#### About Books
 
 - As a user I want to be able to see a list of all available books
 - As a user I want to be able to search for books that matches my query
 - As a logged in user I want to be able to add new books to the site
 - As a logged in user I want to be able to see detailed information about a book when I click on it
 
-#### Reviews
+#### About Reviews
 
 - As a logged in user I want to be able to post reviews for any book
 - As a logged in user I want to be able to edit or delete a review I've written
@@ -89,7 +89,7 @@ For my first submission of this project, I made an agile project board that can 
 - As a logged in user I want to be able to see all reviews for a specific book
 - As a logged in user I want to be able to see all reviews from a specific user
 
-#### Profiles
+#### About Profiles
 
 - As a logged in user I want to have my own profile page
 - As a logged in user I want to have a profile picture
