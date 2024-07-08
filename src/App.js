@@ -14,6 +14,7 @@ import BookDetails from "./pages/books/BookDetails";
 import Home from "./pages/base/Home";
 import AdminPanel from "./pages/admin/AdminPanel";
 import EditBookForm from "./pages/books/EditBookForm";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -42,7 +43,7 @@ const MainContainer = () => {
           <Route exact path="/readers/:id" render={() => <ReaderPage /> } />
           <Route exact path="/admin" render={() => <AdminPanel /> } />
           <Route exact path="/admin/books/edit/:id" render={() => <EditBookForm /> } />
-          <Route render={() => <p>Page not found!</p>} />
+          <Route render={() => <NotFound />} />
         </Switch>
       </Container>
     </div>

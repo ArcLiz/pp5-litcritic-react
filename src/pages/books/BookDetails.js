@@ -8,9 +8,11 @@ import CreateReviewForm from "../reviews/CreateReviewForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import styles from "../../styles/BookDetails.module.css";
 import PopularBooks from "../../components/PopularBooks";
-import bgImage from "../../assets/book-details-bg.png"
+import bgImage from "../../assets/book-details-bg.png";
 import NoCurrentUser from "../../components/NoCurrentUser";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+import NotFound from "../../components/NotFound";
+import Asset from "../../components/Asset";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -21,6 +23,7 @@ const BookDetails = () => {
   const [editReviewId, setEditReviewId] = useState(null);
   const currentUser = useCurrentUser();
   const history = useHistory();
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchBookAndReviews = async () => {
@@ -36,6 +39,7 @@ const BookDetails = () => {
       } catch (error) {
         console.error("Error fetching book or reviews:", error);
         setLoading(false);
+        setError(true);
       }
     };
 
@@ -77,13 +81,17 @@ const BookDetails = () => {
     setReviews(updatedReviews);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return <Asset />;
+  }
+
+  if (error || !book ) {
+    return <NotFound />;
+  }
 
   return (
     <Container>
-      {!currentUser ? (
-        <NoCurrentUser />
-      ) : (
+      {currentUser ? (
         <>
           <Row className="d-flex text-center justify-content-center">
             <Col lg={6} className="d-none d-lg-block text-start">
@@ -221,6 +229,8 @@ const BookDetails = () => {
             initialReview={userReview}
           />
         </>
+      ) : (
+        <NoCurrentUser />
       )}
     </Container>
   );
