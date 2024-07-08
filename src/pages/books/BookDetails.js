@@ -140,11 +140,10 @@ const BookDetails = () => {
                 <h3 className="mb-4">Reviews</h3>
                 {hasUserReviewedBook ? (
                   <span onClick={handleShowReviewModal}>
-                    <i className="fa-solid fa-feather"></i>
-                    <i className="fa-solid fa-user-plus"></i>
+                    Edit <i className="fa-solid fa-feather"></i>
                   </span>
                 ) : (
-                  <span onClick={handleShowReviewModal} className="text-muted small">
+                  <span onClick={handleShowReviewModal} className="text-muted small d-flex">
                     Add <i className="fa-solid fa-feather"></i>
                   </span>
                 )}
