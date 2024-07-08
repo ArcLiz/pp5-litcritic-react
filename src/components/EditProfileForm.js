@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import { axiosReq } from "../api/axiosDefaults";
-import styles from "../styles/Forms.module.css"
+import styles from "../styles/Forms.module.css";
 
 const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
   const [name, setName] = useState(profile.name);
   const [content, setContent] = useState(profile.content);
   const [image, setImage] = useState(profile.image);
   const [errors, setErrors] = useState({});
+  const [alert, setAlert] = useState(null);
   const imageFile = useRef();
 
   useEffect(() => {
@@ -20,7 +21,18 @@ const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === "image") {
-      setImage(URL.createObjectURL(event.target.files[0]));
+      const file = event.target.files[0];
+      if (file) {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+          setAlert('Please select a valid image file (JPEG, PNG, GIF, WEBP).');
+          setImage(profile.image);
+          imageFile.current.value = '';
+          return;
+        }
+        setImage(URL.createObjectURL(file));
+        setAlert(null);
+      }
     } else {
       if (name === "name") {
         setName(value);
@@ -100,6 +112,11 @@ const EditProfileForm = ({ show, handleClose, profile, updateProfileData }) => {
           <Button className={`w-100 mt-3 ${styles.pinkBtn}`} type="submit">
             Save Changes
           </Button>
+          {alert && (
+            <Alert variant="danger" className="mt-3">
+              {alert}
+            </Alert>
+          )}
           {errors?.non_field_errors?.map((error, index) => (
             <Alert key={index} variant="danger">
               {error}
