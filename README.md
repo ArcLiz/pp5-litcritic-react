@@ -446,10 +446,18 @@ Due to using Apple devices for personal use, I haven't been able to physically t
 |                     | Phone (XS)   | Fine - No comments                                                  | Google Chrome Dev Tool |
 
 ### HTML Testing
+I found HTML testing to be quite challenging with React due to the JSX and constant JavaScript inserts even in the render. However, when checking all pages on W3's HTML validator, it came back clean, with information about no effect trailing slashes.
 
 ### CSS Testing
+CSS files came back with "Congratulations! No Error Found" on all files except `ReaderList.module.css`, which states that line 31 .card has a "Parse Error &
+". However, these styles do get applied, so I have not done anything to that error
 
 ### Pylint Testing
+The `Book`, `Follow`, `Like`, `Profile`, and `Review` models, serializers, and views have all been checked using the CI Python Linter. All clear, no errors found.
+
+The only exception is in book.views, where line 5 is too long (81 characters > 79 characters). However, since this is an import statement, I felt the additional 2 characters are acceptable.
+
+For the same reason as above, I did not check settings.py for linting errors, as the few lines that are usually too long are Django's own default settings.
 
 ### Known Issues
 
