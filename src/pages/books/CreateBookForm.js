@@ -145,6 +145,9 @@ const CreateBookModal = ({ show, handleClose }) => {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>Create a New Book</Modal.Title>
+        <Button variant="outline-secondary" size="sm" onClick={handleClose} className="d-block d-sm-none">
+          Close
+        </Button>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit} noValidate>
