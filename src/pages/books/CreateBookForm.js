@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, Form, Image, Alert } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import styles from '../../styles/Forms.module.css';
 import tagStyles from '../../styles/Tags.module.css';
 import defaultCover from '../../assets/nocover.png';
@@ -24,6 +25,7 @@ const CreateBookModal = ({ show, handleClose }) => {
   const [imagePreview, setImagePreview] = useState(defaultCover);
   const [isSeries, setIsSeries] = useState(false);
   const imageFile = useRef();
+  const history = useHistory();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,8 +33,18 @@ const CreateBookModal = ({ show, handleClose }) => {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      const file = e.target.files[0];
+    const file = e.target.files[0];
+
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        setAlerts({ image: 'Please select a valid image file (JPEG, PNG, GIF, WEBP).' });
+        setImagePreview(defaultCover);
+        setFormData({ ...formData, cover_image: null });
+        imageFile.current.value = '';
+        return;
+      }
+
       setFormData({ ...formData, cover_image: file });
       setImagePreview(URL.createObjectURL(file));
     }
@@ -116,6 +128,7 @@ const CreateBookModal = ({ show, handleClose }) => {
         setTags([]);
         setImagePreview(defaultCover);
         setIsSeries(false);
+        history.push(`/books/${response.data.id}`);
         handleClose();
       } else {
       }
@@ -172,6 +185,7 @@ const CreateBookModal = ({ show, handleClose }) => {
               ref={imageFile}
               className="d-none"
             />
+            {alerts.image && <Alert variant="danger">{alerts.image}</Alert>}
           </Form.Group>
           {alerts.description && <Alert variant="danger">{alerts.description}</Alert>}
           <Form.Group controlId="description" className="mt-3">
