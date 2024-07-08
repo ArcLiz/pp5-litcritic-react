@@ -56,8 +56,23 @@ const EditBookForm = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, cover_image: e.target.files[0] });
-    setImagePreview(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files[0];
+  
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors({ ...errors, cover_image: 'Please select a valid image file (JPEG, PNG, GIF, WEBP).' });
+        if (formData.cover_image) {
+          setImagePreview(URL.createObjectURL(formData.cover_image));
+        } else {
+          setImagePreview('');
+        }
+        return;
+      }
+  
+      setFormData({ ...formData, cover_image: file });
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleDelete = i => {
@@ -175,6 +190,9 @@ const EditBookForm = () => {
                   ref={imageFile}
                   className="d-none"
                 />
+                {errors.cover_image && (
+                  <Alert variant="danger" className="mt-2">{errors.cover_image}</Alert>
+                )}
               </Form.Group>
               <Form.Group controlId="description" className="mt-3">
                 <Form.Label>Description</Form.Label>
