@@ -18,50 +18,46 @@ Welcome to LitCrit, a book review sharing platform for book girlies and boyos al
   - [Admin Stories](#admin-stories)
   - [Website Goals](#website-goals)
   - [Requirements](#requirements)
-  - [Agile Approach](#agile-approach)
 - [Structure](#structure)
   - [Database Models](#database-models)
-  - [UX and Design](#ux-and-design)
-  - [React Components](#react-components)
   - [Wireframes](#wireframes)
+  - [React Components](#react-components)
+  - [UX and Design](#design)
 - [Features](#features)
-  - [Home Page](#home-page)
-  - [Navbar](#navbar)
-  - [Sign Up Page](#sign-up-page)
-  - [Sign In Page](#sign-in-page)
-  - [Avatar](#avatar)
-  - [Search Bars](#search-bars)
-  - [Reviews](#reviews)
-  - [Add a Review](#add-a-review)
-  - [Review Page](#review-page)
-  - [Reader Profile Page](#reader-profile-page)
-  - [Followers](#followers)
-- [CRUD Functionality](#crud-functionality)
-  - [Sign up](#sign-up)
-  - [Reader Profile](#reader-profile)
+  - [User Authentication](#user-authentication)
+  - [Site Navigation](#site-navigation)
+  - [Profiles (Readers)](#profiles-or-readers)
   - [Books](#books)
-  - [Review](#review)
-  - [Comments](#comments)
+  - [Reviews](#reviews)
+  - [Follows](#follows)
+  - [Home Page](#home-page)
+  - [Admin Dashboard](#admin-dashboard)
+- [CRUD Functionality](#crud-functionality)
 - [Testing](#testing)
-  - [Front End](#front-end)
+  - [Initial Testing](#initial-testing)
+  - [Retesting the Fixes](#retesting-the-fixes)
+  - [Responsivity Testing](#responsivity-testing)
+  - [Validator Testing](#code-testing)
     - [HTML Testing](#html-testing)
     - [CSS Testing](#css-testing)
-    - [Manual Testing](#manual-testing)
-  - [Back End](#back-end)
     - [Pylint Testing](#pylint-testing)
-    - [Manual Testing](#manual-testing-1)
-  - [Bugs](#bugs)
+  - [Known Issues](#known-issues)
 - [Future Development](#future-development)
 - [Technologies Used](#technologies-used)
-  - [Languages](#languages)
-  - [Libraries & Framework](#libraries---framework)
-  - [Databases](#databases)
-  - [Tools](#tools)
-- [Development and Deployment](#development-and-deployment)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [Additional Tools](#additional-tools)
+  - [Dependency Management](#dependency-management)
+  - [Development Environment](#development-environment)
+  - [Other Services](#other-services)
+- [Development](#development)
   - [Development](#development)
+    - [Forking](#forking-the-github-repository)
+    - [Cloning](#cloning-the-github-repository)
+    - [Setting up Cloudinary](#setting-up-cloudinary)
+    - [Setting up SQL Database](#setting-up-sql-database)
+    - [Installing Requirements](#installing-requirements)
   - [Deployment](#deployment)
-    - [Backend](#backend)
-    - [Frontend](#frontend)
 - [Credits](#credits)
 
 ## UX
@@ -226,7 +222,7 @@ To create a light and airy atmosphere, the website primarily uses a pastel color
 
 - **Admin User**: Admin users (logged in) will see the site logo and Home, Books, Readers, Admin, Sign Out and Profile buttons in their navigation bar ![NavBar admin user](/public/documentation/features/navbar-admin.png)
 
-### Profiles (Readers)
+### Profiles or Readers
 
 - **Create Profile**: Profiles are automatically created upon account creation.
 - **Retrieve Profile**: Profile details are viewed correctly in a responsive layout.
@@ -292,7 +288,7 @@ To create a light and airy atmosphere, the website primarily uses a pastel color
 - **Delete Book (Admin)**: Admins can delete books.
   ![Admin Books](/public/documentation/features/admin-books-table.png)
   ![Admin Hover](/public/documentation/features/admin-book-hover.png)
-- **Edit Book (Admin)**: Admins can update book details.
+- **Edit Book (Admin)**: Admins can update book details.<br>
   ![Admin Edit Book](/public/documentation/features/admin-edit-book.png)
 - **Reviews Table**: Lists all reviews correctly.
 - **Delete Review (Admin)**: Admins can delete reviews.
@@ -572,6 +568,7 @@ In my project I used ElephantSQL, who are unfortunately shutting their services 
 
 ### Installing Requirements
 
+**Back End** <br>
 Install required API packages with:
 
 ```
@@ -586,8 +583,7 @@ Add the following variables to your `env.py` file:
 - `DEV`: Any value indicating development mode (e.g., "1", "True", "BananaWaffles")
 - `ALLOWED_HOST`: Development URL
 
-### Front End
-
+**Front End** <br>
 Install required JS/React packages with:
 
 ```
@@ -600,6 +596,7 @@ npm install
 
 #### Deploying to Heroku
 
+**Backend API**
 1. Log in to Heroku and create a new app.
 2. In the **Settings** tab, add the following config vars (most of which are currently in your `env.py` file):
    - `CLOUDINARY_URL`
@@ -611,6 +608,9 @@ npm install
 3. Deploy the app from the **Deploy** tab by connecting your GitHub repository and selecting your preferred deployment method.
 
 Heroku will handle the deployment process, and once completed, your app will be live.
+
+**Frontend App** <br>
+Same steps as above, but you will not need to add any config variables. 
 
 ## Credits
 
