@@ -149,19 +149,19 @@ This project is structured across two separate repositories, each dedicated to d
 
 During the initial planning phase of the project, I did not have a concrete vision. Instead, I experimented with the wireframe sketching tool Balsamiq to create a preliminary version based on the walkthrough project Moments, incorporating the Books pages I intended to develop. Upon reviewing the original sketches after receiving resubmission instructions, I noticed the use of an accordion component in the initial designs. This discovery led me to incorporate the accordion feature into the current version, aligning with the original conceptual framework and enhancing the overall user experience.
 
-#### Home Page
+#### Home Page Wireframe
 
 ![Wireframe Home](public/documentation/wireframes/wf-home.png)
 
-#### Book List
+#### Book List Wireframe
 
 ![Wireframe Books](public/documentation/wireframes/wf-books.png)
 
-#### Book Details
+#### Book Details Wireframe
 
 ![Wireframe Bookdetail](public/documentation/wireframes/wf-bookdetail.png)
 
-#### Profile Page
+#### Profile Page Wireframe
 
 ![Wireframe Profile](public/documentation/wireframes/wf-profile.png)
 
